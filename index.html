@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/ff.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.1/ckeditor5.css">
+  <link rel="stylesheet" href="css/record.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>法律查詢器</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap');
+  </style>
+</head>
+<body>
+
+
+
+<div class="header-container">
+  <div class="header" style="flex: 0 0 40%;">
+    <h1 class="header-title">Rust Law Web</h1>
+    <p>網頁小六法<br>powered by rust</p>
+  </div>
+
+  <div class="navbar" style="flex: 0 0 60%;">
+    <li id="search-btn" class="main-li">查詢</li>
+    <li id="test-btn" class="main-li">法條</li>
+    <li id="record-btn" class="main-li">資料夾</li>
+    <li id="user-btn" class="main-li">訪客/登入</li>
+  </div>
+</div>
+
+<div id="enter-area" class="content-area" style="display: none">
+  <form id="enter-form" style="display: flex;">
+    <label for="enter-name">用戶名</label>
+    <input id="enter-name">
+    <label for="enter-email">郵箱</label>
+    <input id="enter-email" type="email">
+    <label for="enter-password">密碼</label>
+    <input id="enter-password" type="password">
+    <button type="submit">查詢</button>
+  </form>
+  <div id="personal-data" style="display: none">
+    <h3>登入狀態：</h3>
+    <h3>用戶名字：<span id="user_name"></span></h3>
+    <h3>用戶郵箱：<span id="user_email"></span></h3>
+    <button id="log-out">登出</button>
+  </div>
+</div>
+
+
+<div id="search-area" class="content-area">
+  <!-- 表格: 輸入要獲取的法條 -->
+  <div class="left-side">
+    <h2>查詢法律</h2>
+    <form id="search-law-form">
+      <input list="law-name-data" id="chapter">
+      <datalist id="law-name-data">
+        <option value="民法">
+        <option value="中華民國刑法">
+        <option value="憲法">
+      </datalist>
+      <textarea id='num' placeholder="條目" required></textarea>
+      <button type="submit">查詢</button>
+    </form>
+  </div>
+
+  <div class="right-side">
+    <!-- 印出法條 -->
+    <div id="result-area"></div>
+  </div>
+</div>
+
+<div id="record-area" style="display: none;">
+
+
+  <ul id="dir" style="display: grid;">
+    <li class="add-dir"></li>
+  </ul>
+
+  <div id="in_folder" style="display: none">
+
+    <div class="record-footer" style="display: none;">
+      <button id="back_to_folder"></button>
+      <button id="record-editor-btn">文件</button>
+      <h3>資料夾：<span id="folder-name"></span></h3>
+      <button id="record-card-btn">卡片</button>
+      <button id="delete-dir"></button>
+    </div>
+
+    <div id="record-editor" style="display: none;">
+      <div id="record-viewer">
+        <div id="record-viewer-block">
+          <div id="viewer-bar-header">
+            <p style="display: inline-block;">字數: <span id="text-number"></span></p>
+            <div id="record-viewer-tools-edit">編輯</div>
+          </div>
+          <div id="word-area"></div>
+        </div>
+      </div>
+      <div id="record-writer" style="display: none">
+        <div id="editor-area" style="display: flex">
+          <div id="markdown"></div>
+        </div>
+
+
+        <button id="cancel-edit">取消</button>
+        <button id="confirm-edit">確認</button>
+
+      </div>
+    </div>
+    <div id="record_table"></div>
+  </div>
+
+
+
+
+</div>
+
+
+<div id="test-area" class="content-area" style="display: none;">
+  <div id="law-search-area">
+    <form id="law-search-area-form">
+      <h2>搜索條文</h2>
+      <input list="law-name-data" id="search-chapter">
+      <button type="submit">查詢</button>
+    </form>
+  </div>
+
+  <div id="show-type-nav" style="display: none;">
+    <ul id="show-type-ul" class="show-type-ul">
+      <li id="show-type-all" class="show-type-li"><a>全部</a></li>
+      <li id="show-type-chapter"  class="show-type-li"><a>按章節</a></li>
+      <li id="show-type-string"  class="show-type-li"><a>文字搜索</a></li>
+    </ul>
+    <div class="show-type-nav-footer">
+      <div class="back-to-search"><i class="fa-regular fa-circle-left"></i></div>
+      <div class="chapter_is" id="chapter_is_nav"></div>
+    </div>
+  </div>
+
+  <div id="law-show-area" style="display: none;">
+
+    <div id="ccc" style="display: flex;">
+      <div id="chapter-ul" style="flex: 0 0 10%;">
+      </div>
+      <div id="ttt" style="flex: 0 0 90%;">jjjj</div>
+    </div>
+    <div class="show-type-nav-footer">
+      <div class="back-to-nav"><i class="fa-regular fa-circle-left"></i></div>
+      <div class="chapter_is" id="chapter_is_law_show"></div>
+    </div>
+
+  </div>
+
+  <div id="all-lines-area"  style="display: none;">
+    <div id="all-lines"></div>
+    <div class="show-type-nav-footer">
+      <div class="back-to-nav"><i class="fa-regular fa-circle-left"></i></div>
+      <div class="chapter_is"></div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="/src/main.ts"></script>
+
+
+
+
+
+
+</body>
+</html>
