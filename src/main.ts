@@ -1,6 +1,6 @@
 // otherFile.js
 const config = {
-    apiUrl: "http://localhost:1010"
+    apiUrl: "https://deploylawweb-production.up.railway.app"
 };
 
 import {File} from './types/File.ts';
