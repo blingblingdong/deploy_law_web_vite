@@ -33,12 +33,6 @@ body {
     text-align: left;  /* 文字靠左對齊 */
 }
 
-#nav-chapter {
-    text-align: left;
-    position: absolute;
-    top:100px;
-    left:-50px;
-}
 
 .right{
     padding-left:150px;
@@ -88,9 +82,6 @@ body {
 #chapter-ul li a:hover{
     color:#FDC825;
 }
-
-
-
 
 
 ul ul{

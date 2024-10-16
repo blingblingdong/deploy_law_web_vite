@@ -113,7 +113,7 @@ button[type="submit"] {
 
 
 	.header p {
-		padding-left: 50px !important;
+		padding-left: 10px !important;
 	}
 
 }
@@ -134,22 +134,14 @@ button[type="submit"] {
 	text-align: center;
 	writing-mode: horizontal-tb;
 	font-family: "Playwrite DE Grund", cursive;
-	padding-left: 20px;
+	padding-left: 10px;
 	margin-top: 0px;
 	margin-bottom: 0px;
 	color: black;
 }
 
 
-.header h1 {
-	color: #111111;
-	text-align: center;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	padding: 30px 0px;
-	font-family: "Playwrite DE Grund", cursive;
-	border-bottom: 0px !important;
-}
+
 
 
 
@@ -188,16 +180,6 @@ button[type="submit"] {
 		display: block;
 	}
 
-	.header h1 {
-		padding: 5px 0px;
-		border-bottom: 1px solid black;
-	}
-
-	.navbar li {
-		font-size: 15px;
-		font-weight: 1000;
-		margin: 10px;
-	}
 
 	#dir {
 		display: grid;
@@ -289,15 +271,6 @@ button[type="submit"] {
 	color: #FFFFFF;
 }
 
-@media only screen and (max-width: 640px) {
-	.navbar {
-		display: none;
-		padding-bottom: 5px;
-	}
 
-	.navbar li {
-		border: none;
-	}
-}
 
 
