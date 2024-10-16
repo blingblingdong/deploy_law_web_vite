@@ -10,8 +10,8 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap');
   </style>
-  <script type="module" crossorigin src="/assets/index-BGmQ--q4.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BkZchKr_.css">
+  <script type="module" crossorigin src="/assets/index-BvarR8Dr.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-C9rE4ski.css">
 </head>
 <body>
 
@@ -52,8 +52,13 @@
 
 <div id="search-area" class="content-area">
   <!-- 表格: 輸入要獲取的法條 -->
-  <div class="left-side">
-    <h2>查詢法律</h2>
+  <h2 id="top-search-law-h2">> 查詢法律</h2>
+  <div class="top-search-law-area-container">
+
+    <!-- 印出法條 -->
+    <div id="result-area"></div>
+
+    <h2>搜索</h2>
     <form id="search-law-form">
       <input list="law-name-data" id="chapter">
       <datalist id="law-name-data">
@@ -66,10 +71,6 @@
     </form>
   </div>
 
-  <div class="right-side">
-    <!-- 印出法條 -->
-    <div id="result-area"></div>
-  </div>
 </div>
 
 <div id="record-area" style="display: none;">
