@@ -2,6 +2,7 @@
 <html lang="ch">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/ff.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.1/ckeditor5.css">
@@ -22,7 +23,9 @@
   <div class="header" style="flex: 0 0 40%;">
     <h1 class="header-title">Rust Law Web</h1>
     <p>網頁小六法<br>powered by rust</p>
+    <button class="ham-but normal-button"><i class="fa-solid fa-burger"></i></button>
   </div>
+
 
   <div class="navbar" style="flex: 0 0 60%;">
     <li id="search-btn" class="main-li">查詢</li>
@@ -53,8 +56,13 @@
 
 <div id="search-area" class="content-area">
   <!-- 表格: 輸入要獲取的法條 -->
-  <div class="left-side">
-    <h2>查詢法律</h2>
+  <h2 id="top-search-law-h2">> 查詢法律</h2>
+  <div class="top-search-law-area-container">
+
+    <!-- 印出法條 -->
+    <div id="result-area"></div>
+
+    <h2>搜索</h2>
     <form id="search-law-form">
       <input list="law-name-data" id="chapter">
       <datalist id="law-name-data">
@@ -67,10 +75,6 @@
     </form>
   </div>
 
-  <div class="right-side">
-    <!-- 印出法條 -->
-    <div id="result-area"></div>
-  </div>
 </div>
 
 <div id="record-area" style="display: none;">

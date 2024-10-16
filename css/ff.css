@@ -12,36 +12,10 @@ body {
 }
 
 
-.content-area {
-    display: flex;
-    padding: 20px;
-}
 
-.left-side, .right-side {
-    flex: 1;
-    padding: 20px;
-}
 
-.left-side {
-    border-right: 1px solid #fff;
-    text-align: center;
-}
 
-#search-law-form input,
-#search-law-form textarea,
-#search-law-form button {
-    width: 60%;
-    margin: 10px 0;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-}
 
-#search-law-form input,
-#search-law-form textarea {
-    background-color: #222;
-    color: #fff;
-}
 
 
 
@@ -94,13 +68,7 @@ body {
     padding-left: 0;
 }
 
-li a{
-    display:block;
-    padding:20px 0;
-    color:#FDC825;
-    text-decoration:none;
-    color:#FFF;
-}
+
 
 #chapter-ul li li{
     float:none;

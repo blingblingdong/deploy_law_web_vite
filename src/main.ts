@@ -14,6 +14,21 @@ import {Account} from "./types/account.ts";
 let enter_or_not : boolean;
 let account: Account;
 
+/*設定漢堡表單*/
+let ham_state = true;
+$(function(){
+    $(".ham-but").click(function(){
+        if (ham_state) {
+            $(".navbar").css("display", "flex");
+            ham_state = false;
+        } else {
+            $(".navbar").css("display", "none");
+            ham_state = true;
+        }
+    });
+});
+
+
 $(document).ready(async function() {
     await load_all_chapters();
 
@@ -29,6 +44,7 @@ $(document).ready(async function() {
 
         if (result) {
             enter_or_not = true;
+            $("#user-btn").html(account.user_name);
             $("#enter-form").css("display", "none");
             $("#personal-data").css("display", "flex");
             $("#user_name").html(user_name);
@@ -62,6 +78,7 @@ if (enter_form) {
             localStorage.clear();
             localStorage.setItem('user_name', userName);
             localStorage.setItem('email', e_mail);
+            $("#user-btn").html(account.user_name);
 
             $("#enter-form").css("display", "none");
             $("#personal-data").css("display", "flex");
@@ -77,6 +94,7 @@ if (enter_form) {
 $("#log-out").click(function () {
     $("#personal-data").css("display", "none")
     $("#enter-form").css("display", "flex");
+    enter_or_not = false;
 });
 
 
@@ -87,14 +105,13 @@ if (search_law_form_element) {
         event.preventDefault();
         const chapter = $("#chapter").val();
         const num = $("#num").val();
-        const directory = "second_folder";
-        let id = account.user_name + "-" + directory + "-" + chapter + "-" + num;
-
-        const response = await fetch(`${config.apiUrl}/questions/${chapter}/${num}`);
-        const tableHtml = await response.text();
+        const id = chapter + `-` + num;
+        let law = await load_law(id, config.apiUrl) as Law;
+        const tableHtml = law.one_show(enter_or_not);
 
         const tableContainer = document.getElementById('result-area') as HTMLElement;
         tableContainer.innerHTML = tableHtml;// 清空表格
+
 
         if (event.target && event.target instanceof HTMLFormElement) {
             event.target.reset();
@@ -106,7 +123,7 @@ if (search_law_form_element) {
 /*nav區切換*/
 
 (document.getElementById('search-btn') as HTMLElement).addEventListener('click', () => {
-    (document.getElementById('search-area') as HTMLElement).style.display = 'flex';
+    (document.getElementById('search-area') as HTMLElement).style.display = 'initial';
     (document.getElementById('record-area') as HTMLElement).style.display = 'none';
     (document.getElementById('test-area') as HTMLElement).style.display = 'none';
     (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
@@ -1049,7 +1066,8 @@ $(document).on('submit', '#insert-law-card', async function (event) {
     const chapter = $("#insert-law-card-chapter").val();
     const num = $("#insert-law-card-num").val();
     let id= chapter + "-" + num;
-    let law = await load_law(id) as Law;
+    alert(id);
+    let law = await load_law(id, config.apiUrl) as Law;
     $(".law-block").append(law.one_card());
     event.target.reset();
 });
@@ -1068,25 +1086,7 @@ async function updateEditorContent(newContent: string) {
 
 
 
-import {Law} from './types/Law.ts';
+import {Law, load_law} from './types/Law.ts';
 
-async function load_law(id: string) {
-    let [chapter, num] = id.split("-");
 
-    try {
-        const response = await fetch(`http://localhost:9090/one_law/${chapter}/${num}`);
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();// 假設回應是 JSON 格式
-
-        let new_law = new Law(num, chapter, data.lines);
-        return new_law;  // 返回 Law 物件
-    } catch (error) {
-        console.error("Error:", error);
-        return null; // 或者根據需要處理錯誤時的返回值
-    }
-}
 

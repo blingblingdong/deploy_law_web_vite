@@ -9,10 +9,40 @@ export class Law {
         this.lines = lines;
     }
 
+    one_show(enter_state: boolean): string {
+        let buffer = `<ul class="law-block-lines">`;
+        // 使用 for...of 來迭代 lines 向量，並將每一行包裝在 <li> 中
+        for (let line of this.lines) {
+            buffer += `<li class="law-block-line">${line}</li>`;
+        }
+
+        buffer += `</ul>`;
+        let add_button = "";
+        if (enter_state){
+            add_button = `<div class='top-law_search-add-area'><button class='add-law normal-button' id='add-${this.chapter}-${this.num}'>新增至</button></div>`
+        }
+
+        let block = `
+        <div class="top-search-law-area">
+            <div class="law-content-area">
+                <div class="top-search-law-title" style="display: flex">
+                    <div>${this.chapter}第${this.num}條</div>
+                    <div>${add_button}</div>
+                </div>
+                ${buffer}
+            </div>
+        </div>
+`
+
+
+
+        return block;
+
+    }
+
     one_card(): string {
         let lines = this.lines;
         let buffer = `<ul class="law-block-lines">`;
-
         // 使用 for...of 來迭代 lines 向量，並將每一行包裝在 <li> 中
         for (let line of lines) {
             buffer += `<li class="law-block-line">${line}</li>`;
@@ -40,5 +70,25 @@ export class Law {
 
         // 返回新的 Law 實例
         return new Law(data.num, data.chapter, data.lines);
+    }
+}
+
+export async function load_law(id: string, ApiUrl: string) {
+    let [chapter, num] = id.split("-");
+
+    try {
+        const response = await fetch(`${ApiUrl}/one_law/${chapter}/${num}`);
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();// 假設回應是 JSON 格式
+
+        let new_law = new Law(num, chapter, data.lines);
+        return new_law;  // 返回 Law 物件
+    } catch (error) {
+        console.error("Error:", error);
+        return null; // 或者根據需要處理錯誤時的返回值
     }
 }
