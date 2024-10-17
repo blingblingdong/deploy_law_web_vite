@@ -11,6 +11,7 @@
 /* 讓表單內容更居中美觀 */
 #law-search-area-form {
 	display: flex;
+	flex-wrap: wrap;
 	flex-direction: column;
 	align-items: center;
 	gap: 10px; /* 表單項目之間的間距 */
@@ -25,9 +26,9 @@
 #law-search-area-form input,
 #law-search-area-form textarea,
 #law-search-area-form button {
-	width: 150%;
+	flex: 1 0 5rem;
 	margin: 10px 0;
-	padding: 10px;
+	padding: 10px 10px;
 	border: none;
 	font-size: 20px;
 	border-radius: 5px;
@@ -106,55 +107,6 @@ button[type="submit"] {
 }
 
 
-@media only screen and (max-width: 786px) {
-	.header {
-		border-bottom: 2px solid black;
-	}
-
-
-	.header p {
-		padding-left: 10px !important;
-	}
-
-}
-
-.header-container {
-	align-items: center;
-	background-color: darkorange;
-	display: flex;
-}
-
-.header {
-	background-color: darkorange;
-	display: flex;
-	align-items: center;
-}
-
-.header p {
-	text-align: center;
-	writing-mode: horizontal-tb;
-	font-family: "Playwrite DE Grund", cursive;
-	padding-left: 10px;
-	margin-top: 0px;
-	margin-bottom: 0px;
-	color: black;
-}
-
-
-
-
-
-
-
-
-.navbar li:hover {
-	background: black;
-	color: darkorange;
-}
-
-
-
-
 
 #search-law-form button {
 	background-color: #444;
@@ -174,12 +126,6 @@ button[type="submit"] {
 }
 
 @media only screen and (max-width: 786px) {
-	.header-container {
-		align-items: center;
-		background-color: darkorange;
-		display: block;
-	}
-
 
 	#dir {
 		display: grid;

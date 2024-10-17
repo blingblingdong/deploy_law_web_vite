@@ -11,27 +11,33 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap');
   </style>
-  <script type="module" crossorigin src="/assets/index-B1KkCgih.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-DbUXVaKa.css">
+  <script type="module" crossorigin src="/assets/index-IF-pprit.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-pEe8P-_o.css">
 </head>
 <body>
 
 
 
 <div class="header-container">
-  <div class="header" style="flex: 0 0 40%;">
+  <div class="header">
     <div class="header-title">Rust Law Web</div>
-    <p>網頁小六法<br>powered by rust</p>
-    <button class="ham-but normal-button"><i class="fa-solid fa-burger"></i></button>
   </div>
 
+  <ul class="navbar hider">
+    <li id="search-btn" class="main-li search-btn"><a>查詢</a></li>
+    <li id="test-btn" class="main-li test-btn"><a>法條</a></li>
+    <li id="record-btn" class="main-li record-btn"><a>資料夾</a></li>
+    <li id="user-btn" class="main-li user-btn"><a>訪客/登入</a></li>
+  </ul>
+  <ul class="sidebar">
+    <li id="close-side-bar">`<a>關閉</a></li>
+    <li class="main-li search-btn"><a>查詢</a></li>
+    <li class="main-li test-btn"><a>法條</a></li>
+    <li class="main-li record-btn"><a>資料夾</a></li>
+    <li class="main-li user-btn"><a>訪客/登入</a></li>
+  </ul>
 
-  <div class="navbar" style="flex: 0 0 60%;">
-    <li id="search-btn" class="main-li">查詢</li>
-    <li id="test-btn" class="main-li">法條</li>
-    <li id="record-btn" class="main-li">資料夾</li>
-    <li id="user-btn" class="main-li">訪客/登入</li>
-  </div>
+  <button class="ham-but"><i class="fa-solid fa-burger"></i></button>
 </div>
 
 <div id="enter-area" class="content-area" style="display: none">
@@ -55,21 +61,29 @@
 
 <div id="search-area" class="content-area">
   <!-- 表格: 輸入要獲取的法條 -->
-  <h2 id="top-search-law-h2">> 查詢法律</h2>
   <div class="top-search-law-area-container">
 
     <!-- 印出法條 -->
-    <div id="result-area"></div>
+    <div id="result-area">
+      <div class="top-search-law-area">
+        <div class="law-content-area">
+          <div class="top-search-law-title" style="display: flex">
+            <h2>簡易搜索</h2>
+          </div>
+          <ul class="law-block-lines">
+            <li class="law-block-line">輸入你想要找的法條</li>
+            <li class="law-block-line">與條號</li>
+            <li class="law-block-line">即可獲取</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-    <h2>搜索</h2>
     <form id="search-law-form">
       <input list="law-name-data" id="chapter">
       <datalist id="law-name-data">
-        <option value="民法">
-        <option value="中華民國刑法">
-        <option value="憲法">
       </datalist>
-      <textarea id='num' placeholder="條目" required></textarea>
+      <input type="number" id='num' placeholder="條目" required></input>
       <button type="submit">查詢</button>
     </form>
   </div>

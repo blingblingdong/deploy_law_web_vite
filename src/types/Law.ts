@@ -26,7 +26,7 @@ export class Law {
         <div class="top-search-law-area">
             <div class="law-content-area">
                 <div class="top-search-law-title" style="display: flex">
-                    <div>${this.chapter}第${this.num}條</div>
+                    <h2>${this.chapter}<br>第${this.num}條</h2>
                     <div>${add_button}</div>
                 </div>
                 ${buffer}

@@ -425,11 +425,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-@media print {
-    body {
-        margin: 0 !important;
-    }
-}
 
 .main-container {
     font-family: 'Apple Symbols';
@@ -727,6 +722,12 @@
     margin: 10px;
 }
 
+#result-area {
+    height: 450px;
+    overflow: auto;
+    border: 1px solid #444;
+}
+
 .law-block-lines {
     text-align: left;
     font-size: 18px;
@@ -747,6 +748,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 50px;
 }
 
 #search-law-form {
@@ -768,6 +770,8 @@
 #search-law-form textarea {
     background-color: #222;
     color: #fff;
+    font-size: 20px;
+    text-align: center;
 }
 
 #top-search-law-h2 {
@@ -780,55 +784,94 @@
     top: 30px;
     right: 0px;
     font-size: 30px;
+    background-color: black;
+    color: white;
+    border: none;
 }
 
 @media only screen and (max-width: 786px) {
     .ham-but {
-        display: flex;
-        position: absolute;
-        border: none;
+        display: block;
     }
 
-    .navbar {
-        display: none;
-    }
-
-    .navbar li {
-        font-size: 15px;
-        font-weight: 1000;
-        margin: 10px;
+    .hider {
+        display: none !important;
     }
 
 }
 
 
-.navbar {
+.header-container {
     display: flex;
-    justify-content: space-around;
-    list-style-type:none;
-    background-color: darkorange;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
 }
 
-.navbar li {
+.top-search-law-title h2 {
+    position: relative;
+    border-bottom: 5px solid white;
+    width: 400px;
+}
+
+.top-search-law-title h2::after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 70px;
+    height: 5px;
     background-color: darkorange;
-    color: black;
-    cursor: pointer;
-    text-align: center;
-    transition: background 0.3s;
-    border-radius: 5px;
-    border: 2px solid black;
-    font-size: 14px;
-    font-weight: 1000;
-    padding: 10px 8px;
 }
 
 .header-title {
-    font-size: 18px;
-    color: #111111;
+    font-size: 30px;
+    color: darkorange;
     text-align: center;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    padding: 30px 0px;
     font-family: "Playwrite DE Grund", cursive;
-    border-bottom: 0px !important;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+
+.navbar li:not(:last-child) {
+    margin-right: 50px;
+}
+
+.navbar li:last-child {
+    margin-right: 20px;
+}
+
+.main-li {
+    font-weight: 700;
+    text-align: center;
+}
+
+.main-li a {
+    display: flex;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 250px;
+    z-index: 999;
+    opacity: 0.8;
+    background-color: black;
+    list-style: none;
+}
+
+.sidebar li {
+    padding: 10px 5px;
+
 }

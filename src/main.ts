@@ -15,18 +15,7 @@ let enter_or_not : boolean;
 let account: Account;
 
 /*設定漢堡表單*/
-let ham_state = true;
-$(function(){
-    $(".ham-but").click(function(){
-        if (ham_state) {
-            $(".navbar").css("display", "flex");
-            ham_state = false;
-        } else {
-            $(".navbar").css("display", "none");
-            ham_state = true;
-        }
-    });
-});
+
 
 
 $(document).ready(async function() {
@@ -120,23 +109,38 @@ if (search_law_form_element) {
     });
 }
 
-/*nav區切換*/
-
-(document.getElementById('search-btn') as HTMLElement).addEventListener('click', () => {
-    (document.getElementById('search-area') as HTMLElement).style.display = 'initial';
-    (document.getElementById('record-area') as HTMLElement).style.display = 'none';
-    (document.getElementById('test-area') as HTMLElement).style.display = 'none';
-    (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
+$("#close-side-bar").click(function () {
+   $(".sidebar").hide();
 });
 
-(document.getElementById('user-btn') as HTMLElement).addEventListener('click', () => {
+$(".ham-but").click(function () {
+    $(".sidebar").show();
+});
+
+/*nav區切換*/
+
+$(".user-btn").click(function () {
     (document.getElementById('search-area') as HTMLElement).style.display = 'none';
     (document.getElementById('record-area') as HTMLElement).style.display = 'none';
     (document.getElementById('test-area')  as HTMLElement).style.display = 'none';
     (document.getElementById('enter-area')  as HTMLElement).style.display = 'block';
 });
 
-(document.getElementById('record-btn')  as HTMLElement).addEventListener('click', async () => {
+$(".search-btn").click(function () {
+    (document.getElementById('search-area') as HTMLElement).style.display = 'initial';
+    (document.getElementById('record-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('test-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
+});
+
+$(".test-btn").click(function () {
+    (document.getElementById('search-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('record-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('test-area') as HTMLElement).style.display = 'flex';
+    (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
+});
+
+$(".record-btn").click(async function () {
     (document.getElementById('search-area')  as HTMLElement).style.display = 'none';
     (document.getElementById('test-area')  as HTMLElement).style.display = 'none';
     (document.getElementById('enter-area')  as HTMLElement).style.display = 'none';
@@ -147,12 +151,6 @@ if (search_law_form_element) {
     }
 });
 
-(document.getElementById('test-btn') as HTMLElement).addEventListener('click', () => {
-    (document.getElementById('search-area') as HTMLElement).style.display = 'none';
-    (document.getElementById('record-area') as HTMLElement).style.display = 'none';
-    (document.getElementById('test-area') as HTMLElement).style.display = 'flex';
-    (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
-});
 
 
 /*資料夾區域*/
