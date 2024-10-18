@@ -47,6 +47,8 @@ $(document).ready(async function() {
 
 
 
+
+
 const enter_form = document.getElementById('enter-form');
 
 if (enter_form) {
@@ -86,7 +88,41 @@ $("#log-out").click(function () {
     enter_or_not = false;
 });
 
+let counter = 0;
+$(document).on("click", '.pre-but', function () {
+    const tableHtml = law_vec[counter-1];
+    if(counter > 0) {
+        counter -= 1
+        const tableContainer = document.getElementById('result-area') as HTMLElement;
+        tableContainer.innerHTML = tableHtml;// 清空表格
+    }
+});
 
+$(document).on("click", '.next-but', function () {
+    if(law_vec.length > counter +1 ) {
+        const tableHtml = law_vec[counter+1];
+        counter += 1
+        const tableContainer = document.getElementById('result-area') as HTMLElement;
+        tableContainer.innerHTML = tableHtml;// 清空表格
+    }
+});
+
+let law_vec = new Array();
+let intro = ` <div class="top-search-law-area">
+        <div class="law-content-area">
+          <div class="top-search-law-title" style="display: flex">
+            <h2>簡易搜索</h2>
+          </div>
+          <ul class="law-block-lines">
+            <li class="law-block-line">輸入你想要找的法條</li>
+            <li class="law-block-line">與條號</li>
+            <li class="law-block-line">即可獲取</li>
+          </ul>
+        </div>
+      </div>
+      <i class="fa-solid fa-caret-left pre-but"></i>
+      <i class="fa-solid fa-caret-right next-but"></i>`
+law_vec.push(intro);
 
 let search_law_form_element = document.getElementById('search-law-form');
 if (search_law_form_element) {
@@ -97,6 +133,8 @@ if (search_law_form_element) {
         const id = chapter + `-` + num;
         let law = await load_law(id, config.apiUrl) as Law;
         const tableHtml = law.one_show(enter_or_not);
+        law_vec.push(tableHtml);
+        counter += 1;
 
         const tableContainer = document.getElementById('result-area') as HTMLElement;
         tableContainer.innerHTML = tableHtml;// 清空表格

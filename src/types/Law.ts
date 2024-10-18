@@ -32,6 +32,8 @@ export class Law {
                 ${buffer}
             </div>
         </div>
+        <i class="fa-solid fa-caret-left pre-but"></i>
+        <i class="fa-solid fa-caret-right next-but"></i>
 `
 
 
