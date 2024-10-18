@@ -128,8 +128,7 @@
         </div>
 
 
-        <button id="cancel-edit">取消</button>
-        <button id="confirm-edit">確認</button>
+        <button id="confirm-edit">Save</button>
 
       </div>
     </div>
@@ -142,48 +141,57 @@
 </div>
 
 
-<div id="test-area" class="content-area" style="display: none;">
+<div id="test-area" style="display: none;">
   <div id="law-search-area">
     <form id="law-search-area-form">
-      <h2>搜索條文</h2>
       <input list="law-name-data" id="search-chapter">
       <button type="submit">查詢</button>
+      <button type="reset" id="reset">清除</button>
     </form>
-  </div>
-
-  <div id="show-type-nav" style="display: none;">
-    <ul id="show-type-ul" class="show-type-ul">
-      <li id="show-type-all" class="show-type-li"><a>全部</a></li>
-      <li id="show-type-chapter"  class="show-type-li"><a>按章節</a></li>
-      <li id="show-type-string"  class="show-type-li"><a>文字搜索</a></li>
-    </ul>
-    <div class="show-type-nav-footer">
-      <div class="back-to-search"><i class="fa-regular fa-circle-left"></i></div>
-      <div class="chapter_is" id="chapter_is_nav"></div>
-    </div>
-  </div>
-
-  <div id="law-show-area" style="display: none;">
-
-    <div id="ccc" style="display: flex;">
-      <div id="chapter-ul" style="flex: 0 0 10%;">
+      <ul class="law-search-area-nav">
+        <li id="all-lines-nav"><a class="active">全部</a></li>
+        <li id="chapter-nav"><a>按章節</a></li>
+        <li id="text-nav"><a>文字查詢</a></li>
+        <li id="about-nav"><a>相關資訊</a></li>
+      </ul>
+    <div class="law-search-area-result">
+      <div id="all-lines-area">
+        <div id="all-lines"></div>
       </div>
-      <div id="ttt" style="flex: 0 0 90%;">jjjj</div>
-    </div>
-    <div class="show-type-nav-footer">
-      <div class="back-to-nav"><i class="fa-regular fa-circle-left"></i></div>
-      <div class="chapter_is" id="chapter_is_law_show"></div>
-    </div>
+      <div id="law-show-area" style="display: none;">
+        <form id="law-show-area-form">
+          <input list="chapter-name-data" id="chapter-name">
+          <datalist id="chapter-name-data"></datalist>
+          <button type="submit">查詢</button>
+          <button id="show-chapter">章節</button>
+        </form>
+        <div id="chapter-ul" style="display: none"></div>
+        <div id="ccc" style="display: flex;">
+          <div id="ttt" style="flex: 0 0 90%;"></div>
+        </div>
+      </div>
+      <div id="search-by-text-area" style="display: none">
 
+      </div>
+      <div id="about-area" style="display: none">
+        <dl>
+          <dt>法條名稱</dt>
+          <dd>中華民國刑法</dd>
+        </dl>
+
+        <dl>
+          <dt>法條原網址</dt>
+          <dd>http://localhost:1420/?</dd>
+        </dl>
+
+        <dl>
+          <dt>更新時間</dt>
+          <dd>2024/10/15</dd>
+        </dl>
+      </div>
+    </div>
   </div>
 
-  <div id="all-lines-area"  style="display: none;">
-    <div id="all-lines"></div>
-    <div class="show-type-nav-footer">
-      <div class="back-to-nav"><i class="fa-regular fa-circle-left"></i></div>
-      <div class="chapter_is"></div>
-    </div>
-  </div>
 
 </div>
 

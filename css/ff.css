@@ -11,14 +11,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-
-
-
-
-
-
-
-
 .law-content { /* 底部白色底線 */
     margin-bottom: 20px; /* 與下一個元素的距離 */
     padding: 10px 0; /* 讓內容與底線有些空間 */
@@ -39,90 +31,22 @@ body {
     position:relative;
 }
 
-.chapter-li {
-    display:block;
-    background:#635F5F;
-    padding:20px;
-    width:100px;
-    color:#FFF;
-    text-decoration:none;
-    border-bottom:1px solid #777;
+.chapter-ul-1,
+.chapter-ul-2,
+.chapter-ul-3,
+.chapter-ul-4,
+.chapter-ul-5{
+    list-style: none;
 }
 
-
-.chapter-li:hover {
-    background:#504E4E;
+.chapter-li-1 a,
+.chapter-li-2 a,
+.chapter-li-3 a,
+.chapter-li-4 a,
+.chapter-li-5 a{
+    font-size: 20px;
 }
 
-.chapter-li-2 a {
-    padding-left: 5px;
-}
-
-.chapter-ul-1, .chapter-ul-2 {
-    padding-left: 0;
-}
-
-
-
-#chapter-ul li li{
-    float:none;
-    border-top:1px solid #7F9492;
-}
-
-
-
-#chapter-ul li{
-    float:left;
-    width:150px;
-    text-align:left;
-    list-style-type:none;
-    font-weight:bold;
-}
-
-#chapter-ul li a:hover{
-    color:#FDC825;
-}
-
-
-ul ul{
-    display: none;
-    position: absolute;
-    width:250px;
-}
-
-
-#chapter-ul ul {
-    list-style: none;  /* 移除項目符號 */
-    padding-left: 0;   /* 移除內縮 */
-    margin-left: 0;    /* 取消左側外距 */
-}
-
-
-.chapter-ul-2 {
-    margin-left: 0; /* 移除縮排 */
-    position: relative; /* 保持在文檔流中 */
-    display: none; /* 預設隱藏 */
-    transform: scaleY(0); /* 初始狀態為縮放為 0，隱藏 */
-    transform-origin: top; /* 縮放的基準點設定為頂部 */
-    transition: transform 0.3s ease-out;
-}
-
-
-li li{
-    float:none;
-    border-top:1px solid #7F9492;
-}
-
-
-.chapter-ul-1 {
-    position: relative; /* 成為子層的參考點 */
-}
-
-/* 展開子層 */
-.chapter-li-1:hover > .chapter-ul-2 {
-    display: block; /* 顯示子層 */
-    transform: scaleY(1); /* 展開到正常大小 */
-}
 
 .container {
     display: flex;

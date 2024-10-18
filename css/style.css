@@ -1,42 +1,97 @@
 /* 確保父容器全屏並設置 Flexbox */
 #law-search-area {
-	display: flex;
-	justify-content: center; /* 水平置中 */
-	align-items: center; /* 垂直置中 */
-	height: 50vh; /* 區域高度設為全屏 */
+	/* 區域高度設為全屏 */
 	width: 100vw; /* 區域寬度設為全屏 */
-	margin: 0;
+	margin-top: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
+
+
 
 /* 讓表單內容更居中美觀 */
 #law-search-area-form {
 	display: flex;
+	width: 100%;
 	flex-wrap: wrap;
-	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	gap: 10px; /* 表單項目之間的間距 */
 }
 
-/* 標題的樣式 */
-#law-search-area-form h2 {
-	margin-bottom: 10px;
-	color: darkorange;
-}
 
 #law-search-area-form input,
 #law-search-area-form textarea,
 #law-search-area-form button {
-	flex: 1 0 5rem;
-	margin: 10px 0;
+	margin: 10px 0px;
 	padding: 10px 10px;
 	border: none;
 	font-size: 20px;
 	border-radius: 5px;
 }
 
+#law-show-area-form {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 10px; /* 表單項目之間的間距 */
+}
+
+#law-show-area-form input,
+#law-show-area-form textarea,
+#law-show-area-form button {
+	margin: 10px 0px;
+	padding: 5px 10px;
+	border: none;
+	font-size: 20px;
+	border-radius: 5px;
+}
+
+.law-search-area-result {
+	width: 90%;
+}
+
+.law-search-area-form-send {
+	background-color: black;
+	color: white;
+	font-size: 30px !important;
+}
+
+.law-search-area-form-send:after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 70px;
+	height: 5px;
+	background-color: darkorange;
+}
+
+#law-search-area-form input{
+	flex: 0 0 55%;
+}
+
+#search-law-form button {
+	flex: 0 0 20%;
+}
+
+
 #law-search-area-form button {
 	background-color: darkorange;
 	font-weight: bold;
+}
+
+.law-search-area-nav {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	text-align: center;
+	list-style: none;
+	align-items: center;
+	gap: 30px;
 }
 
 /* 輸入框和按鈕樣式 */

@@ -15,6 +15,31 @@ let enter_or_not : boolean;
 let account: Account;
 
 /*設定漢堡表單*/
+$(document).ready(function() {
+    $('.law-search-area-nav a').click(function() {
+        // 移除所有連結的 'active' 類別
+        $('.law-search-area-nav a').removeClass('active');
+        // 為當前點擊的連結添加 'active' 類別
+        $(this).addClass('active');
+
+        // 隱藏所有結果區塊
+        $('.law-search-area-result > div').hide();
+
+        // 根據點擊的連結顯示相對應的結果區塊
+        if ($(this).parent().is('#all-lines-nav')) {
+            $('#all-lines-area').show();
+        } else if ($(this).parent().is('#chapter-nav')) {
+            $('#law-show-area').show();
+        } else if ($(this).parent().is('#text-nav')) {
+            $('#search-by-text-area').show();
+        } else if ($(this).parent().is('#about-nav')) {
+            $('#about-area').show();
+        }
+    });
+
+    // 初始化，顯示第一個區塊
+    $('#all-lines-area').show();
+});
 
 
 
@@ -245,44 +270,44 @@ async function load_all_dir() {
 /*法條區域*/
 
 // 總搜索表單
-$("#law-search-area-form").submit(function (event) {
+$("#law-search-area-form").submit(async function (event) {
     event.preventDefault();
     const chapter = $("#search-chapter").val() as string;
-    $("#law-search-area").css("display", "none");
-    $("#show-type-nav").css("display", "flex");
-    $(".chapter_is").html(chapter);
-    if (event.target && event.target instanceof HTMLFormElement) {
-        event.target.reset();
-    }
+    await load_all_search_chapters(chapter);
+    await load_all_lines(chapter);
+    await load_chapter_datalist(chapter);
+    $("#search-chapter").addClass("law-search-area-form-send");
 });
 
-// 跳轉區域
-$("#show-type-chapter").click(async function (event) {
-    event.stopPropagation();
-    $("#law-show-area").css("display", "block");
-    await load_all_search_chapters($(".chapter_is").html());
-    $("#show-type-nav").css("display", "none");
+$("#reset").click(function (event) {
+    event.preventDefault();
+    $("#search-chapter").removeClass("law-search-area-form-send");
+    $("#ttt").html("");
 });
 
-$("#show-type-all").click(async function (event) {
-    event.stopPropagation();
-    $("#all-lines-area").css("display", "block");
-    await load_all_lines($(".chapter_is").html());
-    $("#show-type-nav").css("display", "none");
-});
 
-$(".back-to-nav").click(function () {
-    $("#law-show-area").css("display", "none");
-    $("#all-lines-area").css("display", "none");
-    $("#show-type-nav").css("display", "flex");
-});
-
-$(".back-to-search").click(function () {
-    $("#show-type-nav").css("display", "none");
-    $("#law-search-area").css("display", "flex");
-});
 
 /*顯示全部法律區域*/
+async function load_chapter_datalist(chapter: string){
+    try {
+        // 如果 response 有回傳數據且你需要使用的話
+        let response = await fetch(`${config.apiUrl}/input_chapter/${chapter}`, {
+            method: 'GET',
+        });
+        let list = await response.text();
+        $("#chapter-name-data").html(list);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
+            alert(error.message);
+            console.log("Error: " + error.message);
+        } else {
+            // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
+            alert("An unknown error occurred");
+            console.log("Error: ", error);
+        }
+    }
+}
 
 // chapter: 法條名稱，如:刑法、民法
 // 獲取全部法條，並貼上
@@ -321,6 +346,19 @@ async function load_all_lines(chapter: string) {
     });
 }
 
+$(document).on('mouseenter', '.chapter-ul-1 > li', function () {
+    // 關閉同層其他的 ul
+    $(this).siblings().children("ul").stop().slideUp(100);
+    // 展開當前 ul
+    $(this).children("ul").stop().slideDown(100);
+});
+
+$(document).on('mouseleave', '.chapter-ul-1 > li', function () {
+    // 隱藏當前 ul
+    $(this).children("ul").stop().slideUp(100);
+});
+
+
 
 /*按章節搜尋區域*/
 
@@ -332,37 +370,6 @@ async function load_all_search_chapters(chapter: string) {
         success: function (response) {
             // 將回應內容加入到 #all-lines
             $("#chapter-ul").html(response);
-
-            $("<style>")
-                .prop("type", "text/css")
-                .html(`
-                .chapter-ul-2 {
-                    margin-left: 0; /* 移除縮排 */
-                    position: relative; /* 保持在文檔流中 */
-                    display: none; /* 預設隱藏 */
-                    transform: scaleY(0); /* 初始狀態為縮放為 0，隱藏 */
-                    transform-origin: top; /* 縮放的基準點設定為頂部 */
-                    transition: transform 0.3s ease-out;
-                }
-                
-                
-                li li{
-                    float:none;
-                    border-top:1px solid #7F9492;
-                }
-                
-                
-                .chapter-ul-1 {
-                    position: relative; /* 成為子層的參考點 */
-                }
-                
-                /* 展開子層 */
-                .chapter-li-1:hover > .chapter-ul-2 {
-                    display: block; /* 顯示子層 */
-                    transform: scaleY(1); /* 展開到正常大小 */
-                }
-                `)
-                .appendTo("head");
         },
         error: function (xhr, status, error) {
             console.log("Error: " + error);
@@ -398,25 +405,44 @@ $(function () {
 });
 
 
-//下拉式選單
-$(document).on('mouseenter', '.chapter-ul-1 > li', function () {
-    // 關閉同層其他的 ul
-    $(this).siblings().children("ul").stop().slideUp(100);
-    // 展開當前 ul
-    $(this).children("ul").stop().slideDown(100);
+
+
+$("#show-chapter").click(function (event){
+    event.preventDefault();
+    $("#chapter-ul").show();
 });
 
-$(document).on('mouseleave', '.chapter-ul-1 > li', function () {
-    // 隱藏當前 ul
-    $(this).children("ul").stop().slideUp(100);
+$("#law-show-area-form").submit(function (event){
+    event.preventDefault();
+    $("#chapter-ul").hide();
+    const chapter1 = $("#search-chapter").val() as string;
+    const chapter2 = $("#chapter-name").val() as string;
+    const chapter = {chapter1: chapter1, chapter2: chapter2};
+    $.ajax({
+        url: `${config.apiUrl}/lines_by_chapter`,
+        method: 'POST',
+        contentType: 'application/json', // 确保发送 JSON 格式
+        data: JSON.stringify(chapter),
+        success: function (response) {
+            // 將回應內容加入到 #all-lines
+            $("#ttt").html(response);
+        },
+        error: function (xhr, status, error) {
+            console.log("Error: " + error);
+        }
+    });
+    if (event.target && event.target instanceof HTMLFormElement) {
+        event.target.reset();
+    }
 });
 
-
+/*
 $(document).on('click', '.chapter-li-1 > a', function (event) {
     event.stopPropagation(); // 停止事件冒泡
-    const chapter1 = $("#chapter_is_law_show").text();
+    const chapter1 = $("#search-chapter").val() as string;
     const chapter2_html = $(this).html();
     const chapter2 = chapter2_html.replace(/<[^>]*>/g, '');
+    $("#chapter-name").val(chapter2);
     $.ajax({
         url: `${config.apiUrl}/lines_by_chapter/${chapter1}/1/${chapter2}`,
         method: 'GET',
@@ -430,12 +456,15 @@ $(document).on('click', '.chapter-li-1 > a', function (event) {
     });
     $("#chapter-ul").css("display", "block");
 });
+ */
 
+/*
 $(document).on('click', '.chapter-li-2 > a', function (event) {
     event.stopPropagation(); // 停止事件冒泡
-    const chapter1 = $("#chapter_is_law_show").text();
+    const chapter1 = $("#search-chapter").val() as string;
     const chapter2_html = $(this).html();
     const chapter2 = chapter2_html.replace(/<[^>]*>/g, '');
+    $("#chapter-name").val($(this).html());
     $.ajax({
         url: `${config.apiUrl}/lines_by_chapter/${chapter1}/2/${chapter2}`,
         method: 'GET',
@@ -449,6 +478,29 @@ $(document).on('click', '.chapter-li-2 > a', function (event) {
     });
     $("#chapter-ul").css("display", "block");
 });
+ */
+
+$(document).ready(function() {
+    $(document).on("click",".chapter-li-1 > a,.chapter-li-2 > a, .chapter-li-3 > a, .chapter-li-4 > a, .chapter-li-5 > a", function() {
+        // 儲存路徑
+        let fullPath = $(this).find('a').text().trim();
+
+        // 遍歷父元素，直到找到最外層的 li
+        $(this).parents('li').each(function() {
+            let parentText = $(this).find('a').first().text().trim();
+            fullPath = parentText + "/" + fullPath;
+        });
+
+        // 輸出完整路徑
+        fullPath = fullPath.slice(0, -1);
+        const chapter1 = $("#search-chapter").val() as string;
+        $("#chapter-name").val(fullPath);
+
+        // 或者在頁面上顯示
+        // $("#result").text(fullPath);
+    });
+});
+
 
 
 /*關於records*/
@@ -1117,7 +1169,6 @@ async function updateEditorContent(newContent: string) {
         setTimeout(() => updateEditorContent(newContent), 1000);  // 延遲1秒後重試
     }
 }
-
 
 
 

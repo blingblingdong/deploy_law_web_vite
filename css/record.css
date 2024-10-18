@@ -121,6 +121,10 @@
     color: black;
 }
 
+.active {
+    color: darkorange;
+}
+
 
 
 .note-hide-btn, .note-edit-btn  {
@@ -222,10 +226,11 @@
 }
 
 #confirm-edit {
-    right: 0;
+    right: 50%;
     position: fixed;
     bottom: 0;
     border: 1px solid white;
+    border-radius: 5px;
     background-color: black;
     color: white;
     padding: 10px;
@@ -914,12 +919,38 @@
     position: absolute;
     top:300px;
     left: 10px;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .next-but {
     position: absolute;
     top:300px;
     right: 10px;
-    font-size: 25px;
+    font-size: 30px;
+}
+
+.ck-toolbar {
+    background-color: black !important;
+    color: white !important;
+}
+
+.ck-button {
+    color: white!important;
+}
+
+dl {
+    display: flex; /*水平並列*/
+    justify-content: space-between; /*左右對齊*/
+}
+
+dt {
+    padding: 20px 30px;
+    width: 150px;
+    border-bottom: 2px solid #5b8f8f;
+}
+
+dd {
+    padding: 20px 30px;
+    width: calc(100% - 150px); /*減掉dt的寬度，並讓dd的寬度能支援響應式設計*/
+    border-bottom: 2px solid #bbb;
 }
