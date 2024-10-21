@@ -30,7 +30,7 @@
     <li id="record-btn" class="main-li record-btn"><a>資料夾</a></li>
     <li id="user-btn" class="main-li user-btn"><a>訪客/登入</a></li>
   </ul>
-  <ul class="sidebar">
+  <ul class="sidebar" style="display: none">
     <li id="close-side-bar"><a>關閉</a></li>
     <li class="main-li search-btn"><a>查詢</a></li>
     <li class="main-li test-btn"><a>法條</a></li>
@@ -42,15 +42,24 @@
 </div>
 
 <div id="enter-area" class="content-area" style="display: none">
-  <form id="enter-form" style="display: flex;">
-    <label for="enter-name">用戶名</label>
-    <input id="enter-name">
-    <label for="enter-email">郵箱</label>
-    <input id="enter-email" type="email">
-    <label for="enter-password">密碼</label>
-    <input id="enter-password" type="password">
-    <button type="submit">查詢</button>
-  </form>
+  <div id="login-container">
+    <div id="login-or-register">
+      <button id="login">登入</button>
+      <button id="register">註冊</button>
+    </div>
+    <form id="enter-form" style="display: flex;">
+      <input id="enter-email" type="email" placeholder="email">
+      <input id="enter-password" type="password" placeholder="密碼">
+      <button type="submit">登入</button>
+    </form>
+    <form id="register-form" style="display: none;">
+      <input id="register-name" placeholder="用戶名稱" >
+      <input id="register-email" type="email" placeholder="email">
+      <input id="register-password" type="password" placeholder="密碼">
+      <button type="submit">註冊</button>
+    </form>
+    <a href="">忘記密碼?</a>
+  </div>
   <div id="personal-data" style="display: none">
     <h3>登入狀態：</h3>
     <h3>用戶名字：<span id="user_name"></span></h3>
@@ -103,36 +112,46 @@
   </ul>
 
   <div id="in_folder" style="display: none">
-
-    <div class="record-footer" style="display: none;">
-      <button id="back_to_folder"></button>
-      <button id="record-editor-btn">文件</button>
-      <h3>資料夾：<span id="folder-name"></span></h3>
-      <button id="record-card-btn">卡片</button>
-      <button id="delete-dir"></button>
+    <div id="in_folder_title">
+      <h3><span id="folder-name"></span></h3>
+      <ul class="record-nav">
+        <li id="back_to_folder">返回</li>
+        <li id="record-editor-btn" class="record-li">文件</li>
+        <li id="record-card-btn" class="record-li active2">卡片</li>
+        <li id="delete-dir">刪除</li>
+      </ul>
     </div>
 
-    <div id="record-editor" style="display: none;">
+
+  <div id="file" style="display:none">
+    <div id="file_display">
+      <h2 id="file-nav">file-list<span id="file-toggle"><i class="fa-solid fa-caret-down"></i></span></h2>
+      <ul id="file-list"></ul>
+    </div>
+    <div id="record-editor">
+      <div id="editor-tool-bar">
+        <h2 id="file_name"></h2>
+        <button id="record-viewer-tools-delete">刪除</button>
+        <button id="record-viewer-tools-edit">編輯</button>
+      </div>
       <div id="record-viewer">
         <div id="record-viewer-block">
-          <div id="viewer-bar-header">
-            <p style="display: inline-block;">字數: <span id="text-number"></span></p>
-            <div id="record-viewer-tools-edit">編輯</div>
-          </div>
           <div id="word-area"></div>
         </div>
       </div>
-      <div id="record-writer" style="display: none">
-        <div id="editor-area" style="display: flex">
-          <div id="markdown"></div>
-        </div>
-
-
-        <button id="confirm-edit">Save</button>
-
-      </div>
     </div>
+  </div>
+
+    <div id="record-writer" style="display: none">
+      <div id="editor-area" style="display: flex">
+        <div id="markdown"></div>
+      </div>
+      <button id="confirm-edit">Save</button>
+    </div>
+
+
     <div id="record_table"></div>
+
   </div>
 
 
@@ -171,7 +190,13 @@
         </div>
       </div>
       <div id="search-by-text-area" style="display: none">
+        <form id="law-search-text-form">
+          <input id="text">
+          <button type="submit">查詢</button>
+        </form>
+        <div id="law-search-text-result">
 
+        </div>
       </div>
       <div id="about-area" style="display: none">
         <dl>

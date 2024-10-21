@@ -198,20 +198,6 @@
     bottom: 0;
 }
 
-#editor-header-x button {
-    border: 1px solid black;
-    background-color: darkorange;
-    font-size: 20px;
-    border-radius: 10px;
-    padding: 10px;
-    font-size: 20px;
-    margin: 0px 10px;  /* 統一左右邊距 */
-    text-align: center;
-}
-
-.right-btn {
-    position: fixed;
-}
 
 #cancel-edit {
     left: 0;
@@ -239,78 +225,6 @@
 }
 
 
-
-/*records folder頁尾*/
-
-.record-footer {
-    background-color: darkorange;
-    width: 100%;  /* 考慮將寬度設定為 100% 如果不想讓它超出視窗範圍 */
-    display: flex;  /* 使用 Flexbox */
-    justify-content: center;  /* 水平居中 */
-    align-items: stretch;  /* 垂直居中 */
-    text-align: center;
-    padding: 10px 10px;
-    margin-left: 0;/* 添加上下內填充 */
-}
-
-.record-footer h3 {
-    color: black;
-}
-
-.record-footer button, h3 {
-    padding: 10px;
-    font-size: 20px;
-    margin: 0 10px;  /* 統一左右邊距 */
-    text-align: center;
-}
-
-.record-footer button {
-    border: 1px solid black;
-    background-color: darkorange;
-    font-size: 20px;
-    border-radius: 10px;
-}
-
-.record-footer button:hover {
-    color: darkorange;
-    background-color: black;
-}
-
-#back_to_folder {
-    text-align: center;
-    left: 0;
-    position: absolute;
-    padding: 10px 20px;
-}
-
-#back_to_folder:before {
-    content: "\f30a";
-    font-family: 'Font Awesome 5 Free';
-    font-size: 20px;
-    color: black;
-}
-
-#back_to_folder:hover:before{
-    color: darkorange;
-}
-
-
-#delete-dir {
-    right: 0;
-    position: absolute;
-    padding: 10px 25px;
-}
-
-#delete-dir:before {
-    content: "\f1f8";
-    font-family: 'Font Awesome 5 Free';
-    font-size: 20px;
-    color: black;
-}
-
-#delete-dir:hover:before{
-    color: darkorange;
-}
 
 
 
@@ -385,27 +299,9 @@
 
 
 
-/*file檢視部分*/
-#viewer-bar-header {
-    display: flex;
-    text-align: center;
-    align-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
 
-#viewer-bar-header p {
-    left: 0;
-    position: absolute;
-    margin: 10px;
 
-}
 
-#record-viewer-tools-edit {
-    right: 0;
-    position: absolute;
-    margin: 10px;
-}
 
 #word-area {
     margin-top: 50px;
@@ -450,11 +346,16 @@
 }
 
 .popup-content {
-    background-color: darkorange;
-    color: black;
+    background-color: black;
+    color: white;
     padding: 20px;
     border-radius: 10px;
     width: 300px;
+    border: white solid 1px;
+}
+
+.popup-header h3 {
+    color: darkorange;
 }
 
 
@@ -665,22 +566,7 @@
 }
 
 
-#enter-form {
-    padding-top: 100px;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
-}
 
-#enter-form input, enter-form button{
-    margin: 10px;
-    padding: 10px;
-    background-color: #222;
-    color: #fff;
-    width: 60%;
-    border-radius: 5px;
-    border: 1px;
-}
 
 #personal-data {
     margin-top: 100px;
@@ -744,9 +630,37 @@
     align-items: center;
 }
 
+@media only screen and (max-width: 786px) {
+    .top-search-law-title{
+        font-size: 15px;
+    }
+
+    .top-law_search-add-area button {
+        font-size: 12px;
+    }
+
+}
+
+
+.top-search-law-title h2 {
+    position: relative;
+    border-bottom: 5px solid white;
+    width: 80%;
+}
+
+.top-search-law-title h2::after{
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 70px;
+    height: 5px;
+    background-color: darkorange;
+}
+
 .top-law_search-add-area button {
     padding: 5px;
-    margin-left: 30px;
+    margin-left: 10px;
 }
 
 .top-search-law-area-container {
@@ -847,21 +761,7 @@
     padding-top: 10px;
 }
 
-.top-search-law-title h2 {
-    position: relative;
-    border-bottom: 5px solid white;
-    width: 400px;
-}
 
-.top-search-law-title h2::after{
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 70px;
-    height: 5px;
-    background-color: darkorange;
-}
 
 .header-title {
     font-size: 30px;
@@ -953,4 +853,227 @@ dd {
     padding: 20px 30px;
     width: calc(100% - 150px); /*減掉dt的寬度，並讓dd的寬度能支援響應式設計*/
     border-bottom: 2px solid #bbb;
+}
+
+.record-nav {
+    padding-left: 0;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    list-style: none;
+}
+
+#in_folder_title{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+}
+
+#in_folder_title h3 {
+    padding-right: 50px;
+}
+
+@media only screen and (max-width: 400px) {
+    #in_folder_title{
+        display: block;
+    }
+
+    .record-nav {
+        gap: 20px;
+    }
+}
+
+
+
+.record-nav li {
+    color: white;
+    padding: 5px 10px;
+}
+
+.active2 {
+    background-color: darkorange;
+    color: black !important;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+#login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1a1a1a;
+    padding: 20px;
+    margin: 100px 20px;
+    backdrop-filter: blur(80px);
+}
+
+#login-container a {
+    color: white;
+}
+
+#login-or-register {
+    display: flex;
+    gap: 10px;
+}
+
+#login, #register {
+    font-size: 15px;
+    margin: 10px;
+    padding: 5px 10px;
+    background-color: #222;
+    color: #fff;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+
+#enter-form {
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+#enter-form input, #register-form input {
+    font-size: 15px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #222;
+    color: #fff;
+    width: 120%;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+
+#enter-form button, #register-form button {
+    font-size: 15px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #222;
+    color: #fff;
+    width: 60%;
+    border-radius: 5px;
+    border: 1px solid white;
+}
+
+#register-form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.active3 {
+    background-color: white !important;
+    color: black!important;
+}
+
+#file {
+    flex-direction: row;
+    gap: 20px;
+}
+
+@media only screen and (max-width: 1000px) {
+    #file {
+        flex-direction: column;
+        gap: 0px;
+    }
+
+    #file-list {
+        flex-direction: row !important;
+    }
+
+    #file_display {
+        width: 100% !important;
+    }
+}
+
+#file-list {
+    list-style: none;
+    padding-left: 10px;
+    text-align: center;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#file-nav {
+    align-items: center;
+    text-align: center;
+}
+
+#file-list li {
+    font-size: 20px;
+}
+
+
+#file-list li::before {
+    font-family: 'Font Awesome 5 Free';
+    content: "\f15b";
+    padding-right: 5px;
+}
+
+#file_display {
+    width: 30%;
+}
+
+.file-active {
+    color: darkorange;
+}
+
+#file-toggle {
+    padding-left: 10px;
+}
+
+#create-file-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+#create-file-form input{
+    padding: 10px;
+    width: 80%;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    border: solid 1px white;
+}
+
+#create-file-form button {
+    padding: 10px 20px;
+    background-color: darkorange;
+    color: black;
+    font-weight: bold;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+}
+
+#editor-tool-bar {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 0px;
+    text-align: center;
+    justify-content: center;
+}
+
+#editor-tool-bar button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid white;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+}
+
+#record-viewer-tools-edit {
+    background-color: seagreen;
+}
+
+#record-viewer-tools-delete {
+    background-color: crimson;
 }

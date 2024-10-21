@@ -2,6 +2,8 @@
 const config = {
     apiUrl: "https://deploylawweb-production.up.railway.app"
 };
+// https://deploylawweb-production.up.railway.app
+// http://127.0.0.1:7070
 
 import {File} from './types/File.ts';
 import $ from 'jquery';
@@ -13,6 +15,20 @@ import {Account} from "./types/account.ts";
 // 設定三個全域變數
 let enter_or_not : boolean;
 let account: Account;
+
+$("#login").click(function(){
+    $("#enter-form").css("display", "flex");
+    $("#register-form").hide();
+    $("#login").addClass("active3");
+    $("#register").removeClass("active3");
+});
+
+$("#register").click(function(){
+    $("#enter-form").hide();
+    $("#register-form").css("display", "flex");
+    $("#register").addClass("active3");
+    $("#login").removeClass("active3");
+});
 
 /*設定漢堡表單*/
 $(document).ready(function() {
@@ -41,7 +57,14 @@ $(document).ready(function() {
     $('#all-lines-area').show();
 });
 
-
+$(document).ready(function() {
+    $('.record-li').click(function() {
+        // 移除所有連結的 'active' 類別
+        $('.record-li').removeClass('active2');
+        // 為當前點擊的連結添加 'active' 類別
+        $(this).addClass('active2');
+    });
+});
 
 $(document).ready(async function() {
     await load_all_chapters();
@@ -59,7 +82,7 @@ $(document).ready(async function() {
         if (result) {
             enter_or_not = true;
             $("#user-btn").html(account.user_name);
-            $("#enter-form").css("display", "none");
+            $("#login-container").css("display", "none");
             $("#personal-data").css("display", "flex");
             $("#user_name").html(user_name);
             $("#user_email").html(email);
@@ -81,24 +104,22 @@ if (enter_form) {
         event.preventDefault(); // 阻止默認表單提交行為
 
         // 獲取用戶輸入的數據
-        const userName_element = document.getElementById('enter-name');
-        const userName = userName_element ? (userName_element as HTMLInputElement).value : '';
         const email_element =  document.getElementById('enter-email');
         const e_mail = email_element ? (email_element as HTMLInputElement).value : '';
         const password_elemnt = document.getElementById('enter-password');
         const password = password_elemnt ? (password_elemnt as HTMLInputElement).value : '';
 
-        account= new Account(userName, e_mail);
-        let enter_or_not = await account.login(password, config.apiUrl);
+        account= new Account("", e_mail);
+        enter_or_not = await account.login(password, config.apiUrl);
         if(enter_or_not) {
             localStorage.clear();
-            localStorage.setItem('user_name', userName);
+            localStorage.setItem('user_name', account.user_name);
             localStorage.setItem('email', e_mail);
             $("#user-btn").html(account.user_name);
 
-            $("#enter-form").css("display", "none");
+            $("#login-container").css("display", "none");
             $("#personal-data").css("display", "flex");
-            $("#user_name").html(userName);
+            $("#user_name").html(account.user_name);
             $("#user_email").html(e_mail);
         }
 
@@ -109,8 +130,36 @@ if (enter_form) {
 
 $("#log-out").click(function () {
     $("#personal-data").css("display", "none")
-    $("#enter-form").css("display", "flex");
+    $("#login-container").css("display", "flex");
     enter_or_not = false;
+});
+
+$("#register-form").submit(async function(event) {
+    event.preventDefault();
+    const name = $("#register-name").val() as string;
+    const email = $("#register-email").val() as string;
+    const password = $("#register-password").val();
+    account = new Account(name, email);
+    const register_or_not = await account.registration(config.apiUrl, password);
+    if (register_or_not) {
+        enter_or_not = await account.login(password, config.apiUrl);
+        if(enter_or_not) {
+            localStorage.clear();
+            localStorage.setItem('user_name', account.user_name);
+            localStorage.setItem('email', account.user_email);
+            $("#user-btn").html(account.user_name);
+
+            $("#login-container").css("display", "none");
+            $("#personal-data").css("display", "flex");
+            $("#user_name").html(account.user_name);
+            $("#user_email").html(account.user_email);
+        }
+    }
+
+    if (event.target && event.target instanceof HTMLFormElement) {
+        event.target.reset();
+    }
+
 });
 
 let counter = 0;
@@ -233,14 +282,10 @@ $(function () {
 
 // 載入與展示所有資料夾
 async function load_all_dir() {
-    let key = (account.token as string).toString().replace(/"/g, '');
     try {
         // 發送 GET 請求，並等待回應
         const response = await fetch(`${config.apiUrl}/all_dir/${account.user_name}`, {
             method: 'GET',
-            headers: {
-                'Authorization': key,
-            }
         });
 
         // 確保請求成功
@@ -284,6 +329,23 @@ $("#reset").click(function (event) {
     $("#search-chapter").removeClass("law-search-area-form-send");
     $("#ttt").html("");
 });
+
+$("#law-search-text-form").submit(async function (event){
+    event.preventDefault();
+    const chapter = $("#search-chapter").val() as string;
+    const text = $("#text").val();
+    $.ajax({
+        url: `${config.apiUrl}/laws_by_text/${chapter}/${text}`,
+        method: 'GET',
+        success: function (response) {
+            // 將回應內容加入到 #all-lines
+            $("#law-search-text-result").html(response);
+        },
+        error: function (xhr, status, error) {
+            console.log("Error: " + error);
+        }
+    });
+})
 
 
 
@@ -436,49 +498,6 @@ $("#law-show-area-form").submit(function (event){
     }
 });
 
-/*
-$(document).on('click', '.chapter-li-1 > a', function (event) {
-    event.stopPropagation(); // 停止事件冒泡
-    const chapter1 = $("#search-chapter").val() as string;
-    const chapter2_html = $(this).html();
-    const chapter2 = chapter2_html.replace(/<[^>]*>/g, '');
-    $("#chapter-name").val(chapter2);
-    $.ajax({
-        url: `${config.apiUrl}/lines_by_chapter/${chapter1}/1/${chapter2}`,
-        method: 'GET',
-        success: function (response) {
-            // 將回應內容加入到 #all-lines
-            $("#ttt").html(response);
-        },
-        error: function (xhr, status, error) {
-            console.log("Error: " + error);
-        }
-    });
-    $("#chapter-ul").css("display", "block");
-});
- */
-
-/*
-$(document).on('click', '.chapter-li-2 > a', function (event) {
-    event.stopPropagation(); // 停止事件冒泡
-    const chapter1 = $("#search-chapter").val() as string;
-    const chapter2_html = $(this).html();
-    const chapter2 = chapter2_html.replace(/<[^>]*>/g, '');
-    $("#chapter-name").val($(this).html());
-    $.ajax({
-        url: `${config.apiUrl}/lines_by_chapter/${chapter1}/2/${chapter2}`,
-        method: 'GET',
-        success: function (response) {
-            // 將回應內容加入到 #all-lines
-            $("#ttt").html(response);
-        },
-        error: function (xhr, status, error) {
-            console.log("Error: " + error);
-        }
-    });
-    $("#chapter-ul").css("display", "block");
-});
- */
 
 $(document).ready(function() {
     $(document).on("click",".chapter-li-1 > a,.chapter-li-2 > a, .chapter-li-3 > a, .chapter-li-4 > a, .chapter-li-5 > a", function() {
@@ -508,7 +527,9 @@ $(document).ready(function() {
 // 進入
 $(document).on('click', '.the-dir', async function () {// 停止事件冒泡
     await loadQuestions($(this).text());
-    await loadFile(account.user_name as string, $(this).text());
+    if (account.user_name) {
+        await get_file_list(account.user_name, $(this).text());
+    }
     $("#in_folder").css("display", "block");
     $("#dir").css("display", "none");
     $(".record-footer").css("display", "flex");
@@ -534,7 +555,7 @@ $(document).on('click', '#delete-dir', async function () {// 停止事件冒泡
             }
         });
 
-        await delete_file(account.user_name as string, dir as  string);
+
         $("#dir").css("display", "grid");
         $("#in_folder").css("display", "none");
         $(".record-footer").css("display", "none");
@@ -563,7 +584,7 @@ async function loadQuestions(directory: string) {
 $("#record-card-btn").click(function () {
     $("#record_table").css("display", "block");
     $(".record-footer").css("display", "flex");
-    $("#record-editor").css("display", "none");
+    $("#file").css("display", "none");
 });
 
 // 宣告宿主區域
@@ -571,8 +592,68 @@ $("#record-card-btn").click(function () {
 let host = document.getElementById('word-area') as HTMLElement;
 let globalShadowRoot = host.attachShadow({ mode: 'open' });
 
-async function loadFile(user_name: string, dir: string) {
-    var id = user_name + "-" + dir;
+async function get_file_list(user_name: string, dir: string) {
+    $.ajax({
+        url: `${config.apiUrl}/file_list/${user_name}/${dir}`,
+        method: 'GET',
+        success: function (response) {
+            $("#file-list").html(response);
+            $("#file-list").append(`<li class='add-file'><a>新增文件</a></li>`)
+        },
+        error: function (xhr, status, error) {
+            alert("失敗");
+            console.log("Error: " + error);
+        }
+    });
+}
+
+$(document).on('click', '.the-file > a', async function () {
+    await loadFile(account.user_name, $("#folder-name").text(),$(this).text());
+    $("#record-editor").css("display", "block");
+    $("#file_name").html($(this).text());
+    $('.the-file a').removeClass('file-active');
+    $(this).addClass('file-active');
+});
+
+$(document).on('click', '.add-file > a', async function(){
+    const popup = `
+    <div class="popup" id="popup-add-file">
+        <div class="popup-content" id="popup-add-file-content">
+            <div class="popup-header">
+                <h3>加入文件</h3>
+        <span class="close-btn" id="hidePopup-add-file">X</span>
+        </div>
+        <div class="popup-body">
+    <form id="create-file-form" style="display: flex; flex-direction: column;">
+    <input type="text" id="add-file-name" placeholder="文件名稱" required>
+    <button type="submit">創建</button>
+        </form>
+        </div>
+        </div>
+        </div>`
+
+    document.body.insertAdjacentHTML('beforeend', popup);
+
+    // 顯示彈出視窗
+    (document.getElementById('popup-add-file') as HTMLElement).style.display = 'flex';
+
+    $(document).on('submit', '#create-file-form', async function (event) {
+        event.preventDefault();
+        const file_name = $("#add-file-name").val();
+        await add_file(account.user_name, $("#folder-name").text(), file_name);
+        await get_file_list(account.user_name, $("#folder-name").text());
+        event.target.reset();
+    });
+});
+
+$(document).on('click', '#hidePopup-add-file', function () {
+    $("#popup-add-file").remove();
+});
+
+
+
+async function loadFile(user_name: string, dir: string, file_name: string) {
+    var id = user_name + "-" + dir + "-" +file_name;
     $.ajax({
         url: `${config.apiUrl}/file_html/${id}`,
         method: 'GET',
@@ -597,17 +678,12 @@ async function loadFile(user_name: string, dir: string) {
 
 $("#record-editor-btn").click(async function () {
     $("#record_table").css("display", "none");
-    $("#record-editor").css("display", "block");
-    $(".record-footer").css("display", "flex");
-    if (account.user_name) {
-        await loadFile(account.user_name, $("#folder-name").text());
-    }
+    $("#file").css("display", "flex");
 });
 
 $("#back_to_folder").click(async function () {
     $("#dir").css("display", "grid");
     $("#in_folder").css("display", "none");
-    $(".record-footer").css("display", "none");
     $(".header-container").removeClass("hideproperty");
     await load_all_dir();
 });
@@ -638,7 +714,7 @@ $(document).on('click', '.add-dir', function () {
     $(document).on('submit', '#create-dir-form', async function (event) {
         event.preventDefault();
         const dir = $("#dir-name").val();
-        await add_to_dir("創建", "創建", account.user_name as string, dir as string);
+        await create_dir(account.user_name, dir);
         await load_all_dir();
         event.target.reset();
     });
@@ -707,7 +783,7 @@ function showPopup() {
         const dirName = $("#pop-dir-name").val();
 
         if (dirName) {
-            await add_to_dir("創建", "創建", account.user_name as string, dirName as string);
+            await create_dir(account.user_name as string, dirName as string);
             alert(`創建的資料夾名稱: ${dirName}`);
             $("#add_dir_form").css("display", "none");
             $.ajax({
@@ -776,20 +852,37 @@ $(document).on('click', '#confirmSelection', function () {
     $("#popup").remove();
 });
 
+async function create_dir(user_name: string, directory: string) {
+    let id = user_name + directory;
+    const dir = {id: id, user_name: user_name, directory: directory, public: false, description: ""}
+    try {
+        await fetch(`${config.apiUrl}/dir`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dir),
+        });
+        alert("成功加入");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
+            alert(error.message);
+            console.log("Error: " + error.message);
+        } else {
+            // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
+            alert("An unknown error occurred");
+            console.log("Error: ", error);
+        }
+    }
+}
+
 async function add_to_dir(chapter: string, num: string, user_name: string, directory: string) {
     let id = user_name + "-" + directory + "-" + chapter + "-" + num;
     const question = {id: id, chapter: chapter, num: num, user_name: user_name, directory: directory, note: "新增筆記"};
     const url = `${config.apiUrl}/questions/${chapter}/${num}`;
 
     try {
-        if (chapter != "創建") {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('無此條目');
-            }
-        } else {
-            await add_file(user_name, directory, "# 請用markdown寫入筆記!", "no");
-        }
         // 如果 response 有回傳數據且你需要使用的話
         await fetch(`${config.apiUrl}/questions`, {
             method: 'POST',
@@ -894,13 +987,11 @@ $(document).ready(function() {
 
 
 
-
-
 $("#record-viewer-tools-edit").click(async function() {
     $("#record-writer").css("display", "block");
-    $("#record-viewer").css("display", "none");
+    $("#file").css("display", "none");
     $(".record-footer").css("display", "none");
-    let id = account.user_name+ "-" + $("#folder-name").text();
+    let id = account.user_name+ "-" + $("#folder-name").text() + "-" + $("#file_name").text();
 
 
     // 使用 fetch 發送 GET 請求
@@ -926,7 +1017,7 @@ $("#record-viewer-tools-edit").click(async function() {
 $("#confirm-edit").click(async function () {
     let text = $("#preview").html();
 
-    let id = account.user_name + "-" + $("#folder-name").text();
+    let id = account.user_name + "-" + $("#folder-name").text() + "-" + $("#file_name").text();
     let content = $(".ck-content").html();
 
     //更新筆記內容
@@ -974,21 +1065,18 @@ $("#confirm-edit").click(async function () {
     await performUpdates();
 
 
-
-
     $("#record-writer").css("display", "none");
-    $("#record-viewer").css("display", "flex");
-    $(".record-footer").css("display", "flex");
+    $("#file").css("display", "flex");
 });
 
 
-async function delete_file(user_name: string, directory: string) {
-    let id = user_name + "-" + directory;
+async function delete_file(user_name: string, directory: string, file_name: string) {
+    let id = user_name + "-" + directory + "-" + file_name;
     try {
         let res = await fetch(`${config.apiUrl}/file/${id}`, {
             method: 'DELETE',
         });
-        alert("成功加入"+ res);
+        alert("成功刪除");
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
@@ -1002,10 +1090,18 @@ async function delete_file(user_name: string, directory: string) {
     }
 }
 
+$(document).on('click', '#record-viewer-tools-delete', async function() {
+    let x  = confirm("確認刪除?");
+    if (x){
+        await delete_file(account.user_name, $("#folder-name").text(), $("#file_name").text());
+        await get_file_list(account.user_name, $("#folder-name").text());
+    }
+});
 
-async function add_file(user_name: string, directory: string, content: string, css: string) {
-    let id = user_name + "-" + directory;
-    const file = {id: id, content: content, css: css, user_name: user_name, directory: directory};
+
+async function add_file(user_name: string, directory: string, file_name: string) {
+    let id = user_name + "-" + directory + "-" + file_name;
+    const file = {id: id, content: "New content", css: "            .law-block {            color: white;            border: 1px solid white;            margin: 10px;        }                .multiple-block {            color: white;            border: 1px solid white;            margin: 10px;        }                .law-block-content-multiple {            border-bottom: 1px solid white;            margin-top: 5px;            margin-left: 5px;            margin-right: 5px;        }                .law-block-chapter {            font-weight: bold;        }                .law-block-chapter:hover {            cursor: pointer;            color: red;        }    ", user_name: user_name, directory: directory, file_name: file_name};
 
     try {
         await fetch(`${config.apiUrl}/file`, {
@@ -1171,9 +1267,19 @@ async function updateEditorContent(newContent: string) {
 }
 
 
-
-
 import {Law, load_law} from './types/Law.ts';
 
+let state = true;
 
+$(document).on('click', '#file-nav', function() {
+    if (state) {
+        $("#file-list").hide();
+        $("#file-toggle").html(`<i class="fa-solid fa-caret-up"></i>`);
+        state = false;
+    } else {
+        $("#file-list").show();
+        $("#file-toggle").html(`<i class="fa-solid fa-caret-down"></i>`);
+        state = true;
+    }
+});
 

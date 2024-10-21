@@ -32,6 +32,16 @@
 	border-radius: 5px;
 }
 
+@media only screen and (max-width: 786px) {
+
+	#law-search-area-form input,
+	#law-search-area-form textarea,
+	#law-search-area-form button {
+		font-size: 15px;
+	}
+
+}
+
 #law-show-area-form {
 	display: flex;
 	flex-wrap: wrap;
@@ -49,6 +59,42 @@
 	font-size: 20px;
 	border-radius: 5px;
 }
+
+@media only screen and (max-width: 786px) {
+
+	#law-show-area-form input,
+	#law-show-area-form textarea,
+	#law-show-area-form button {
+		font-size: 15px;
+	}
+
+}
+
+#law-search-text-form {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 10px; /* 表單項目之間的間距 */
+}
+
+#law-search-text-form input,
+#law-search-text-form button {
+	margin: 10px 0px;
+	padding: 5px 10px;
+	border: none;
+	font-size: 20px;
+	border-radius: 5px;
+}
+
+@media only screen and (max-width: 786px) {
+
+	#law-search-text-form input,
+	#law-search-text-form button {
+		font-size: 15px;
+	}
+}
+
 
 .law-search-area-result {
 	width: 90%;
@@ -92,6 +138,7 @@
 	list-style: none;
 	align-items: center;
 	gap: 30px;
+	padding-left: 0;
 }
 
 /* 輸入框和按鈕樣式 */
@@ -271,6 +318,7 @@ button[type="submit"] {
 #show-type-string:hover:before {
 	color: #FFFFFF;
 }
+
 
 
 

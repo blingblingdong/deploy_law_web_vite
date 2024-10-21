@@ -35,9 +35,9 @@ export class Account {
        }
    }
 
-   async login(password:string, apiurl: string) {
+   async registration(apiurl:string, password: string) {
        try {
-           const response = await fetch(`${apiurl}/login`, {
+           const response = await fetch(`${apiurl}/registration`, {
                method: 'POST',
                headers: {
                    'Content-Type': 'application/json'
@@ -50,11 +50,10 @@ export class Account {
            });
 
            if(response.ok) {
-               this.token = await response.text();
-               alert("登入成功!");
+               alert("註冊成功");
                return true;
            } else {
-               alert("登入失敗");
+               alert("註冊失敗");
                return false;
            }
 
@@ -71,22 +70,28 @@ export class Account {
        }
    }
 
-   async registration(password: string, apiurl: string) {
+   async login(password:string, apiurl: string) {
        try {
-           const response = await fetch(`${apiurl}/registration`, {
+           const response = await fetch(`${apiurl}/login`, {
                method: 'POST',
                headers: {
                    'Content-Type': 'application/json'
                },
                body: JSON.stringify({
-                   user_name: this.user_name,
                    email: this.user_email,
                    password: password
                })
            });
 
            if(response.ok) {
-               alert("註冊成功，登入帳號即可使用!")
+               const data = await response.json();
+               this.token = data.token;
+               this.user_name = data.user_name;
+               alert("登入成功!");
+               return true;
+           } else {
+               alert("登入失敗");
+               return false;
            }
 
        } catch (error: unknown) {

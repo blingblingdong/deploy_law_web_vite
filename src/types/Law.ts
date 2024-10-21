@@ -94,3 +94,4 @@ export async function load_law(id: string, ApiUrl: string) {
         return null; // 或者根據需要處理錯誤時的返回值
     }
 }
+
