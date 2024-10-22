@@ -32,6 +32,7 @@
 	border-radius: 5px;
 }
 
+
 @media only screen and (max-width: 786px) {
 
 	#law-search-area-form input,
@@ -68,6 +69,10 @@
 		font-size: 15px;
 	}
 
+	.law-search-area-form-send {
+		font-size: 20px !important;
+	}
+
 }
 
 #law-search-text-form {
@@ -102,8 +107,8 @@
 
 .law-search-area-form-send {
 	background-color: black;
-	color: white;
-	font-size: 30px !important;
+	color: white !important;
+	font-size: 30px;
 }
 
 .law-search-area-form-send:after {
@@ -233,6 +238,7 @@ button[type="submit"] {
 		display: grid;
 		gap: 10px;
 		grid-template-columns: repeat(3, 1fr);
+
 	}
 
 

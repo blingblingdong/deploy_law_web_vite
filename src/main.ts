@@ -81,13 +81,13 @@ $(document).ready(async function() {
 
         if (result) {
             enter_or_not = true;
-            $("#user-btn").html(account.user_name);
+            $(".user-btn").html(`<a>${account.user_name}</a>`);
             $("#login-container").css("display", "none");
             $("#personal-data").css("display", "flex");
             $("#user_name").html(user_name);
             $("#user_email").html(email);
         } else {
-            alert("使用時間過期，重新登入");
+
         }
 
     }
@@ -115,7 +115,7 @@ if (enter_form) {
             localStorage.clear();
             localStorage.setItem('user_name', account.user_name);
             localStorage.setItem('email', e_mail);
-            $("#user-btn").html(account.user_name);
+            $(".user-btn").html(`<a>${account.user_name}</a>`);
 
             $("#login-container").css("display", "none");
             $("#personal-data").css("display", "flex");
@@ -328,6 +328,7 @@ $("#reset").click(function (event) {
     event.preventDefault();
     $("#search-chapter").removeClass("law-search-area-form-send");
     $("#ttt").html("");
+    $("#search-chapter").val("");
 });
 
 $("#law-search-text-form").submit(async function (event){
@@ -361,11 +362,9 @@ async function load_chapter_datalist(chapter: string){
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-            alert(error.message);
             console.log("Error: " + error.message);
         } else {
             // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-            alert("An unknown error occurred");
             console.log("Error: ", error);
         }
     }

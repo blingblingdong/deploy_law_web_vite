@@ -25,11 +25,9 @@ export class Account {
        } catch (error: unknown) {
            if (error instanceof Error) {
                // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-               alert(error.message);
                console.log("Error: " + error.message);
            } else {
                // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-               alert("An unknown error occurred");
                console.log("Error: ", error);
            }
        }
@@ -60,11 +58,9 @@ export class Account {
        } catch (error: unknown) {
            if (error instanceof Error) {
                // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-               alert(error.message);
                console.log("Error: " + error.message);
            } else {
                // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-               alert("An unknown error occurred");
                console.log("Error: ", error);
            }
        }
@@ -97,11 +93,9 @@ export class Account {
        } catch (error: unknown) {
            if (error instanceof Error) {
                // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-               alert(error.message);
                console.log("Error: " + error.message);
            } else {
                // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-               alert("An unknown error occurred");
                console.log("Error: ", error);
            }
        }
