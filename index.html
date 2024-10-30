@@ -19,6 +19,7 @@
 
 
 
+
 <div class="header-container">
   <div class="header">
     <div class="header-title">Rust Law Web</div>
@@ -106,6 +107,43 @@
 
 <div id="record-area" style="display: none;">
 
+  <ul id="dir-nav">
+    <li class="dir-nav-li" id="my-dir-li"><a>我的</a></li>
+    <li class="dir-nav-li" id="public-dir-li"><a>畫廊</a></li>
+  </ul>
+
+  <div id="public-folder" style="display: none">
+    <div id="public-folder-find-page">
+      <form id="public-folder-search">
+        <input id="public-folder-name">
+        <button type="submit">查詢</button>
+      </form>
+      <div id="public-dir-display"></div>
+    </div>
+
+    <div id="in-public-folder">
+      <div id="in-public-folder-header">
+        <h3 id="in-public-folder-name"></h3>
+        <div id="in-public-folder-writer"></div>
+      </div>
+      <ul class="public-folder-nav">
+        <li id="back_to_public_folder">返回</li>
+        <li id="public-folder-file-li" class="record-li">文件</li>
+      </ul>
+      <div id="public-folder-file">
+        <nav id="public-file-nav">
+          <p>navigation</p>
+          <button id="public-folder-ham">ham</button>
+          <ul id="public-folder-file-nav">
+          </ul>
+        </nav>
+        <div id="public-folder-file-word-area">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 
   <ul id="dir" style="display: grid;">
     <li class="add-dir"></li>
@@ -136,7 +174,7 @@
       </div>
       <div id="record-viewer">
         <div id="record-viewer-block">
-          <div id="word-area"></div>
+          <div id="word-area" class="ck-content ck-editor__editable ck"></div>
         </div>
       </div>
     </div>

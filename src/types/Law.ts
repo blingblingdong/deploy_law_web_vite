@@ -75,8 +75,7 @@ export class Law {
     }
 }
 
-export async function load_law(id: string, ApiUrl: string) {
-    let [chapter, num] = id.split("-");
+export async function load_law(chapter: string, num: string, ApiUrl: string) {
 
     try {
         const response = await fetch(`${ApiUrl}/one_law/${chapter}/${num}`);

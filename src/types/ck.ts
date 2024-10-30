@@ -1,6 +1,8 @@
 
 import {
     AccessibilityHelp,
+    SimpleUploadAdapter,
+    PasteFromOffice,
     Autoformat,
     Autosave,
     BalloonToolbar,
@@ -42,6 +44,8 @@ import {
     FontColor,
     FontFamily,
     FontSize,
+    Clipboard,
+    PastePlainText,
 } from 'ckeditor5';
 
 
@@ -57,7 +61,7 @@ export const editorConfig = {
                 label: '文字裝飾',
                 withText: true,
                 icon: false,
-                items: ['bold', 'italic', 'underline', 'fontColor', 'fontBackgroundColor', 'fontFamily']
+                items: ['bold', 'italic', 'underline', 'fontColor', 'fontBackgroundColor', 'fontFamily', 'fontSize']
             },
             {
                 label: '插入',
@@ -85,6 +89,8 @@ export const editorConfig = {
         Autosave,
         BalloonToolbar,
         BlockQuote,
+        Clipboard,
+        PasteFromOffice,
         Bold,
         Essentials,
         FullPage,
@@ -96,11 +102,13 @@ export const editorConfig = {
         IndentBlock,
         Italic,
         Link,
+        SimpleUploadAdapter,
         Paragraph,
         SelectAll,
         ShowBlocks,
         SourceEditing,
         Table,
+        PastePlainText,
         TableCaption,
         TableCellProperties,
         TableColumnResize,
@@ -109,6 +117,7 @@ export const editorConfig = {
         TextTransformation,
         Underline,
         Image,
+        SimpleUploadAdapter,
         ImageInsert,
         Undo,
         ImageBlock,
@@ -120,6 +129,17 @@ export const editorConfig = {
         ImageUpload,
     ],
     balloonToolbar: [ 'fontColor', 'fontBackgroundColor', 'bold', '|', 'link'],
+    simpleUpload: {
+
+        // The URL that the images are uploaded to.
+        uploadUrl: 'http://localhost:8080/upload_image/ck/image',
+
+        // Enable the XMLHttpRequest.withCredentials property.
+        withCredentials: false,
+
+        // Headers sent along with the XMLHttpRequest to the upload server.
+    },
+    pastePlainText: true,
     heading: {
         options: [
             {
@@ -195,7 +215,7 @@ export const editorConfig = {
     placeholder: 'Type or paste your content here!',
     table: {
         contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
-    }
+    },
 };
 
 

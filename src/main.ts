@@ -1,13 +1,16 @@
 // otherFile.js
 const config = {
-    apiUrl: "https://deploylawweb-production.up.railway.app"
+    apiUrl: "http://127.0.0.1:8080"
 };
 // https://deploylawweb-production.up.railway.app
-// http://127.0.0.1:7070
+// http://127.0.0.1:8080
 
 import {File} from './types/File.ts';
 import $ from 'jquery';
 import {Account} from "./types/account.ts";
+
+let x= 0;
+alert(x);
 
 
 /*帳號與初始設定區*/
@@ -204,8 +207,7 @@ if (search_law_form_element) {
         event.preventDefault();
         const chapter = $("#chapter").val();
         const num = $("#num").val();
-        const id = chapter + `-` + num;
-        let law = await load_law(id, config.apiUrl) as Law;
+        let law = await load_law(chapter, num, config.apiUrl) as Law;
         const tableHtml = law.one_show(enter_or_not);
         law_vec.push(tableHtml);
         counter += 1;
@@ -586,10 +588,8 @@ $("#record-card-btn").click(function () {
     $("#file").css("display", "none");
 });
 
-// 宣告宿主區域
 
-let host = document.getElementById('word-area') as HTMLElement;
-let globalShadowRoot = host.attachShadow({ mode: 'open' });
+
 
 async function get_file_list(user_name: string, dir: string) {
     $.ajax({
@@ -606,7 +606,7 @@ async function get_file_list(user_name: string, dir: string) {
     });
 }
 
-$(document).on('click', '.the-file > a', async function () {
+$(document).on('click', '#file-list > li > a', async function () {
     await loadFile(account.user_name, $("#folder-name").text(),$(this).text());
     $("#record-editor").css("display", "block");
     $("#file_name").html($(this).text());
@@ -659,12 +659,7 @@ async function loadFile(user_name: string, dir: string, file_name: string) {
         success: function (response) {
             var file = File.from_api_v2(response);
 
-            globalShadowRoot.innerHTML =
-                `<style>
-                    ${file.css}
-                </style>
-                ${file.content}
-    `;
+            $("#word-area").html(file.content);
             let number = file.content.length;
             $("#text-number").html(number.toString);
         },
@@ -1017,7 +1012,7 @@ $("#confirm-edit").click(async function () {
     let text = $("#preview").html();
 
     let id = account.user_name + "-" + $("#folder-name").text() + "-" + $("#file_name").text();
-    let content = $(".ck-content").html();
+    let content = editorInstance.getData();
 
     //更新筆記內容
     async function update_content() {
@@ -1045,7 +1040,7 @@ $("#confirm-edit").click(async function () {
                 throw new Error("获取数据失败");
             }
             var file = await File.from_api_v2(await response.json());
-            globalShadowRoot.innerHTML = `<style>${file.css}</style>${file.content}`;
+            $("#word-area").html(file.content);
 
             // 更新筆記字數
             let number = $("#word-area").text().length;
@@ -1125,7 +1120,7 @@ async function add_file(user_name: string, directory: string, file_name: string)
 }
 
 import { editorConfig } from './types/ck.ts';
-import {ClassicEditor, EditorConfig,} from 'ckeditor5';
+import {ClassicEditor, EditorConfig, Clipboard} from 'ckeditor5';
 
 
 
@@ -1136,9 +1131,14 @@ function load_editor() {
         .create((document.querySelector('#markdown') as HTMLElement), editorConfig as EditorConfig)
         .then(editor => {
             editorInstance = editor;
-            $(".ck-toolbar__items").append(`<span>法律相關：</span><button class="ck ck-button ck-disabled ck-off", id="ck-law">插入法條</button>`);
-            $(".ck-toolbar__items").append(`<button class="ck ck-button ck-disabled ck-off", id="ck-law-card">插入卡片</button>`);
-            $(".ck-toolbar__items").append(`<button class="ck ck-button ck-disabled ck-off", id="ck-law-css">編輯css</button>`);
+            editor.editing.view.document.on('clipboardInput', (evt, data) => {
+                const plainText = data.dataTransfer.getData('text/plain');
+                editor.model.change(writer => {
+                    editor.model.insertContent(writer.createText(plainText));
+                });
+                evt.stop(); // 阻止事件繼續傳遞，避免重復處理
+            }, { priority: 'highest' });
+            $(".ck-toolbar__items").append(`<button class="ck ck-button ck-disabled ck-off", id="ck-law-card">插入法條</button>`);
         })
         .catch(error => {
             console.error('There was a problem initializing the editor:', error);
@@ -1213,7 +1213,7 @@ function show_lawcard_Popup() {
 
     $(document).on('click', '#confirm_card', async function () {
         const law_block = $("#view-bar").html();
-        let old_content = $(".ck-content").html();
+        let old_content = editorInstance.getData();
         const LawBlock = {old_content: old_content, new_content:law_block };
 
         try {
@@ -1248,9 +1248,7 @@ $(document).on('submit', '#insert-law-card', async function (event) {
     event.preventDefault(); // 阻止表單提交後刷新頁面
     const chapter = $("#insert-law-card-chapter").val();
     const num = $("#insert-law-card-num").val();
-    let id= chapter + "-" + num;
-    alert(id);
-    let law = await load_law(id, config.apiUrl) as Law;
+    let law = await load_law(chapter, num, config.apiUrl) as Law;
     $(".law-block").append(law.one_card());
     event.target.reset();
 });
@@ -1282,3 +1280,92 @@ $(document).on('click', '#file-nav', function() {
     }
 });
 
+//public folder
+$(document).ready(function() {
+    $('.dir-nav-li a').click(function() {
+        // 移除所有連結的 'active' 類別
+        $('.dir-nav-li a').removeClass('dir-nav-active');
+        // 為當前點擊的連結添加 'active' 類別
+        $(this).addClass('dir-nav-active');
+
+        // 隱藏所有結果區塊
+        $('#public-folder').hide();
+        $('#dir').hide();
+
+        // 根據點擊的連結顯示相對應的結果區塊
+        if ($(this).parent().is('#public-dir-li')) {
+            $('#public-folder').show();
+        } else if ($(this).parent().is('#my-dir-li')) {
+            $('#dir').show();
+        }
+    });
+
+    // 初始化，顯示第一個區塊
+    $('#dir').show();
+});
+
+$(document).ready(async function() {
+    try {
+        let res = await fetch(`${config.apiUrl}/pub_dir`, {
+            method: 'GET',
+        });
+        let t= await res.text();
+        $("#public-dir-display").html(t);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
+            alert(error.message);
+            console.log("Error: " + error.message);
+        } else {
+            // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
+            alert("An unknown error occurred");
+            console.log("Error: ", error);
+        }
+    }
+});
+
+$(document).on('click', '.public-dir', async function() {
+    const user = $(this).attr("id").split("-")[1];
+    const dir_name = $(this).attr("id").split("-")[2];
+    $.ajax({
+        url: `${config.apiUrl}/file_list/${user}/${dir_name}`,
+        method: 'GET',
+        success: function (response) {
+            $("#public-folder-file-nav").html(response);
+        },
+        error: function (xhr, status, error) {
+            alert("失敗");
+            console.log("Error: " + error);
+        }
+    });
+    $("#public-folder-find-page").hide();
+    $("in-public-folder").show();
+    $("#in-public-folder-name").html(dir_name);
+    $("#in-public-folder-writer").html(user);
+});
+
+$(document).on('click', '#back_to_public_folder', function() {
+    $("#public-folder-find-page").show();
+    $("#in-public-folder").hide();
+});
+
+$(document).on('click', '#public-folder-file-nav > li > a', function() {
+    var id = $("#in-public-folder-writer").html() + "-" + $("#in-public-folder-name").html() + "-" + $(this).html();
+    $.ajax({
+        url: `${config.apiUrl}/file_html/${id}`,
+        method: 'GET',
+        success: function (response) {
+            var file = File.from_api_v2(response);
+
+            $("#public-folder-file-word-area").html(file.content);
+        },
+        error: function (xhr, status, error) {
+            alert("失敗");
+            console.log("Error: " + error);
+        }
+    });
+});
+
+$(document).on('click', '#public-folder-ham', function() {
+    $("#public-folder-file-nav").slideToggle(200);
+});
