@@ -1,6 +1,7 @@
 // otherFile.js
 const config = {
-    apiUrl: "http://127.0.0.1:8080"
+    apiUrl: "https://deploylawweb-production.up.railway.app"
+
 };
 // https://deploylawweb-production.up.railway.app
 // http://127.0.0.1:8080
