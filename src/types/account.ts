@@ -20,6 +20,7 @@ export class Account {
                this.token = tk;
                return true;
            } else {
+             alert("你的登入已罹於時效，請重新登入");
                return false;
            }
        } catch (error: unknown) {

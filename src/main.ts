@@ -9,8 +9,7 @@ import {File} from './types/File.ts';
 import $ from 'jquery';
 import {Account} from "./types/account.ts";
 
-let x= 0;
-alert(x);
+
 
 
 /*帳號與初始設定區*/
@@ -600,8 +599,7 @@ async function get_file_list(user_name: string, dir: string) {
             $("#file-list").append(`<li class='add-file'><a>新增文件</a></li>`)
         },
         error: function (xhr, status, error) {
-            alert("失敗");
-            console.log("Error: " + error);
+                       console.log("Error: " + error);
         }
     });
 }
@@ -664,8 +662,7 @@ async function loadFile(user_name: string, dir: string, file_name: string) {
             $("#text-number").html(number.toString);
         },
         error: function (xhr, status, error) {
-            alert("失敗");
-            console.log("Error: " + error);
+                       console.log("Error: " + error);
         }
     });
 }
@@ -861,11 +858,10 @@ async function create_dir(user_name: string, directory: string) {
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-            alert(error.message);
-            console.log("Error: " + error.message);
+                       console.log("Error: " + error.message);
         } else {
             // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-            alert("An unknown error occurred");
+          
             console.log("Error: ", error);
         }
     }
@@ -889,12 +885,10 @@ async function add_to_dir(chapter: string, num: string, user_name: string, direc
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-            alert(error.message);
-            console.log("Error: " + error.message);
+                       console.log("Error: " + error.message);
         } else {
             // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-            alert("An unknown error occurred");
-            console.log("Error: ", error);
+                       console.log("Error: ", error);
         }
     }
 }
@@ -948,7 +942,7 @@ async function update_note(user: string, dir: string, chapter: string, num: stri
         contentType: 'application/json', // 确保发送 JSON 格式
         data: JSON.stringify({ note: note }), // 将 note 包装在 JSON 对象中
         success: function (response) {
-            alert("ff");
+          
         },
         error: function (xhr, status, error) {
             alert("更新失败");
@@ -1001,7 +995,7 @@ $("#record-viewer-tools-edit").click(async function() {
             await updateEditorContent(content);
         })
         .catch(error => {
-            alert("失敗");
+           
             console.log("Error: " + error.message);
         });
 });
@@ -1074,12 +1068,10 @@ async function delete_file(user_name: string, directory: string, file_name: stri
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-            alert(error.message);
-            console.log("Error: " + error.message);
+                       console.log("Error: " + error.message);
         } else {
             // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-            alert("An unknown error occurred");
-            console.log("Error: ", error);
+                       console.log("Error: ", error);
         }
     }
 }
@@ -1109,12 +1101,10 @@ async function add_file(user_name: string, directory: string, file_name: string)
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-            alert(error.message);
-            console.log("Error: " + error.message);
+                       console.log("Error: " + error.message);
         } else {
             // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-            alert("An unknown error occurred");
-            console.log("Error: ", error);
+                       console.log("Error: ", error);
         }
     }
 }
@@ -1230,12 +1220,10 @@ function show_lawcard_Popup() {
         } catch (error: unknown) {
             if (error instanceof Error) {
                 // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-                alert(error.message);
-                console.log("Error: " + error.message);
+                                console.log("Error: " + error.message);
             } else {
                 // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-                alert("An unknown error occurred");
-                console.log("Error: ", error);
+                               console.log("Error: ", error);
             }
         }
     });
@@ -1314,12 +1302,11 @@ $(document).ready(async function() {
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-            alert(error.message);
+           
             console.log("Error: " + error.message);
         } else {
             // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-            alert("An unknown error occurred");
-            console.log("Error: ", error);
+                       console.log("Error: ", error);
         }
     }
 });
@@ -1334,8 +1321,7 @@ $(document).on('click', '.public-dir', async function() {
             $("#public-folder-file-nav").html(response);
         },
         error: function (xhr, status, error) {
-            alert("失敗");
-            console.log("Error: " + error);
+                       console.log("Error: " + error);
         }
     });
     $("#public-folder-find-page").hide();
@@ -1360,8 +1346,7 @@ $(document).on('click', '#public-folder-file-nav > li > a', function() {
             $("#public-folder-file-word-area").html(file.content);
         },
         error: function (xhr, status, error) {
-            alert("失敗");
-            console.log("Error: " + error);
+                       console.log("Error: " + error);
         }
     });
 });
