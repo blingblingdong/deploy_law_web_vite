@@ -1328,11 +1328,28 @@ table {
 #public-folder-ham {
     display: none;
     top: 200px;
+    content: "\f0c9";
+    font-family: "Font Awesome 5 Free";
+    background-color: black;
+    border: none;
 }
+
+
+#public-folder-ham:after {
+    content: "\f0c9";
+    font-family: "Font Awesome 5 Free";
+    font-size: 20px;
+    color: white;
+}
+
+
+
 
 @media only screen and (max-width: 600px) {
     #public-folder-ham {
         display: block;
+        content: "\f0c9";
+        font-family: "Font Awesome 5 Free";
     }
 
     #public-folder-file-nav {
@@ -1371,3 +1388,52 @@ table {
     flex-direction: column;
 }
 
+#content-table li a {
+  color: white;
+  text-decoration: none;
+}
+
+#content-table {
+  list-style: none;
+  padding: 0;
+}
+
+#content-table-area {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 5px 0;
+  margin-top: 10px;
+}
+
+#content-table-area h3 {
+  margin: 0;
+}
+
+#private-content-table li a {
+  color: white;
+  text-decoration: none;
+}
+
+#private-content-table {
+  list-style: none;
+  padding: 0;
+}
+
+#private-content-table-area {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 5px 0;
+  margin-top: 10px;
+}
+
+#private-content-table-area h3 {
+  margin: 0;
+}
+
+.content-table-h3 {
+  padding-left: 5px;
+}
+
+.content-table-h2 {
+  font-weight: bold;
+}

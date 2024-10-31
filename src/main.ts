@@ -1,12 +1,11 @@
 // otherFile.js
 const config = {
-    apiUrl: "https://deploylawweb-production.up.railway.app"
-
+    apiUrl: " https://deploylawweb-production.up.railway.app"
 };
 // https://deploylawweb-production.up.railway.app
 // http://127.0.0.1:8080
 
-import {File} from './types/File.ts';
+import {File, get_file} from './types/File.ts';
 import $ from 'jquery';
 import {Account} from "./types/account.ts";
 
@@ -606,7 +605,13 @@ async function get_file_list(user_name: string, dir: string) {
 }
 
 $(document).on('click', '#file-list > li > a', async function () {
-    await loadFile(account.user_name, $("#folder-name").text(),$(this).text());
+   const id = account.user_name + "-" + $("#folder-name").text() + "-" + $(this).text();
+    const file = await get_file(config.apiUrl, id);
+    if(file) {
+      $("#word-area").html(file.content);
+      $("#private-content-table").html(file.css);
+      $("#private-folder-title").html(file.file_name);
+    }
     $("#record-editor").css("display", "block");
     $("#file_name").html($(this).text());
     $('.the-file a').removeClass('file-active');
@@ -650,23 +655,7 @@ $(document).on('click', '#hidePopup-add-file', function () {
 
 
 
-async function loadFile(user_name: string, dir: string, file_name: string) {
-    var id = user_name + "-" + dir + "-" +file_name;
-    $.ajax({
-        url: `${config.apiUrl}/file_html/${id}`,
-        method: 'GET',
-        success: function (response) {
-            var file = File.from_api_v2(response);
 
-            $("#word-area").html(file.content);
-            let number = file.content.length;
-            $("#text-number").html(number.toString);
-        },
-        error: function (xhr, status, error) {
-                       console.log("Error: " + error);
-        }
-    });
-}
 
 $("#record-editor-btn").click(async function () {
     $("#record_table").css("display", "none");
@@ -1034,12 +1023,14 @@ $("#confirm-edit").click(async function () {
             if (!response.ok) {
                 throw new Error("获取数据失败");
             }
-            var file = await File.from_api_v2(await response.json());
-            $("#word-area").html(file.content);
+            const file = await get_file(config.apiUrl, id);
+            if(file) {
+              $("#word-area").html(file.content);
+              $("#private-content-table").html(file.css);
+              $("#private-folder-title").html(file.file_name);
+            }
 
-            // 更新筆記字數
-            let number = $("#word-area").text().length;
-            $("#text-number").html(number.toString);
+            
         } catch (error) {
             console.error("Error: ", error);
         }
@@ -1315,11 +1306,19 @@ $(document).ready(async function() {
 $(document).on('click', '.public-dir', async function() {
     const user = $(this).attr("id").split("-")[1];
     const dir_name = $(this).attr("id").split("-")[2];
+    $("#in-public-folder").show();
     $.ajax({
         url: `${config.apiUrl}/file_list/${user}/${dir_name}`,
         method: 'GET',
         success: function (response) {
             $("#public-folder-file-nav").html(response);
+         const list: HTMLElement[] = $("#public-folder-file-nav > li > a").toArray() as HTMLElement[];
+      if (list.length > 0) {
+      $(list[0]).css("color", "red");
+    
+      } else {
+      alert(0)
+        }
         },
         error: function (xhr, status, error) {
                        console.log("Error: " + error);
@@ -1329,29 +1328,67 @@ $(document).on('click', '.public-dir', async function() {
     $("in-public-folder").show();
     $("#in-public-folder-name").html(dir_name);
     $("#in-public-folder-writer").html(user);
-});
+   });
 
 $(document).on('click', '#back_to_public_folder', function() {
     $("#public-folder-find-page").show();
     $("#in-public-folder").hide();
 });
 
-$(document).on('click', '#public-folder-file-nav > li > a', function() {
+$(document).on('click', '#public-folder-file-nav > li > a',async function() {
     var id = $("#in-public-folder-writer").html() + "-" + $("#in-public-folder-name").html() + "-" + $(this).html();
-    $.ajax({
-        url: `${config.apiUrl}/file_html/${id}`,
-        method: 'GET',
-        success: function (response) {
-            var file = File.from_api_v2(response);
+    const file = await get_file(config.apiUrl, id);
+    if (file) {
+         $("#public-folder-ck").html(file.content);
+         $("#content-table").html(file.css);
+         $("#public-folder-file-title").html(file.file_name);
+       }
 
-            $("#public-folder-file-word-area").html(file.content);
-        },
-        error: function (xhr, status, error) {
-                       console.log("Error: " + error);
-        }
-    });
+
+
 });
 
 $(document).on('click', '#public-folder-ham', function() {
     $("#public-folder-file-nav").slideToggle(200);
 });
+
+$(document).ready( async function(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const userid = urlParams.get('user');
+  const directory = urlParams.get('dir');
+  const file_name = urlParams.get('file_name');
+
+
+  if(userid && directory) {
+   $.ajax({
+        url: `${config.apiUrl}/file_list/${userid}/${directory}`,
+        method: 'GET',
+        success: function (response) {
+            $("#public-folder-file-nav").html(response);
+        },
+        error: function (xhr, status, error) {
+                       console.log("Error: " + error);
+        }
+    });
+    $("#public-folder").show();
+    $("#dir").hide();
+    $("#public-folder-find-page").hide();
+    $("in-public-folder").show();
+    $("#in-public-folder-name").html(directory);
+    $("#in-public-folder-writer").html(userid);
+    $("#search-area").hide();
+    $("#record-area").show();
+
+    if(file_name) {
+       const id = userid + "-" + directory + "-" + file_name;
+       const file = await get_file(config.apiUrl, id);
+       if (file) {
+         $("#public-folder-ck").html(file.content);
+         $("#content-table").html(file.css);
+         $("#public-folder-file-title").html(file.file_name);
+       }
+     }
+
+    }
+
+   });
