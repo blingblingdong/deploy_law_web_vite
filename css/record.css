@@ -989,6 +989,7 @@ dd {
 }
 
 #file-list {
+    flex-wrap: wrap;
     list-style: none;
     padding-left: 10px;
     text-align: center;
@@ -1057,9 +1058,12 @@ dd {
     gap: 20px;
     align-items: center;
     margin-bottom: 0px;
-    text-align: center;
-    justify-content: center;
+    justify-content: flex-start;
     color: black;
+}
+
+#editor-tool-bar h1 {
+  color: white;
 }
 
 #editor-tool-bar button {
@@ -1069,14 +1073,15 @@ dd {
     font-weight: bold;
     font-size: 14px;
     text-align: center;
+    color: white;
+    background-color: black;
 }
 
 #record-viewer-tools-edit {
-    background-color: seagreen;
+
 }
 
 #record-viewer-tools-delete {
-    background-color: crimson;
 }
 
 button {
@@ -1436,4 +1441,20 @@ table {
 
 .content-table-h2 {
   font-weight: bold;
+}
+
+.using-law-chapter {
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  list-style: none;
+}
+
+.using-law-chapter li {
+ padding: 0px; 
+}
+
+.using-law-chapter:hover {
+  display: flex;
 }

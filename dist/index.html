@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ch">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,265 +12,268 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap');
   </style>
-  <script type="module" crossorigin src="/assets/index-DmocJKCG.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-Ca7AqsvJ.css">
+  <script type="module" crossorigin src="/assets/index-4nG_uk1e.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DlQHgKDc.css">
 </head>
+
 <body>
 
 
 
 
-<div class="header-container">
-  <div class="header">
-    <div class="header-title">Rust Law Web</div>
-  </div>
-
-  <ul class="navbar hider">
-    <li id="search-btn" class="main-li search-btn"><a>查詢</a></li>
-    <li id="test-btn" class="main-li test-btn"><a>法條</a></li>
-    <li id="record-btn" class="main-li record-btn"><a>資料夾</a></li>
-    <li id="user-btn" class="main-li user-btn"><a>訪客/登入</a></li>
-  </ul>
-  <ul class="sidebar" style="display: none">
-    <li id="close-side-bar"><a>關閉</a></li>
-    <li class="main-li search-btn"><a>查詢</a></li>
-    <li class="main-li test-btn"><a>法條</a></li>
-    <li class="main-li record-btn"><a>資料夾</a></li>
-    <li class="main-li user-btn"><a>訪客/登入</a></li>
-  </ul>
-
-  <button class="ham-but"><i class="fa-solid fa-burger"></i></button>
-</div>
-
-<div id="enter-area" class="content-area" style="display: none">
-  <div id="login-container">
-    <div id="login-or-register">
-      <button id="login">登入</button>
-      <button id="register">註冊</button>
+  <div class="header-container">
+    <div class="header">
+      <div class="header-title">Rust Law Web</div>
     </div>
-    <form id="enter-form" style="display: flex;">
-      <input id="enter-email" type="email" placeholder="email">
-      <input id="enter-password" type="password" placeholder="密碼">
-      <button type="submit">登入</button>
-    </form>
-    <form id="register-form" style="display: none;">
-      <input id="register-name" placeholder="用戶名稱" >
-      <input id="register-email" type="email" placeholder="email">
-      <input id="register-password" type="password" placeholder="密碼">
-      <button type="submit">註冊</button>
-    </form>
-    <a href="">忘記密碼?</a>
+
+    <ul class="navbar hider">
+      <li id="search-btn" class="main-li search-btn"><a>查詢</a></li>
+      <li id="test-btn" class="main-li test-btn"><a>法條</a></li>
+      <li id="record-btn" class="main-li record-btn"><a>資料夾</a></li>
+      <li id="user-btn" class="main-li user-btn"><a>訪客/登入</a></li>
+    </ul>
+    <ul class="sidebar" style="display: none">
+      <li id="close-side-bar"><a>關閉</a></li>
+      <li class="main-li search-btn"><a>查詢</a></li>
+      <li class="main-li test-btn"><a>法條</a></li>
+      <li class="main-li record-btn"><a>資料夾</a></li>
+      <li class="main-li user-btn"><a>訪客/登入</a></li>
+    </ul>
+
+    <button class="ham-but"><i class="fa-solid fa-burger"></i></button>
   </div>
-  <div id="personal-data" style="display: none">
-    <h3>登入狀態：</h3>
-    <h3>用戶名字：<span id="user_name"></span></h3>
-    <h3>用戶郵箱：<span id="user_email"></span></h3>
-    <button id="log-out">登出</button>
-  </div>
-</div>
 
-
-<div id="search-area" class="content-area">
-  <!-- 表格: 輸入要獲取的法條 -->
-  <div class="top-search-law-area-container">
-
-    <!-- 印出法條 -->
-    <div id="result-area">
-      <div class="top-search-law-area">
-        <div class="law-content-area">
-          <div class="top-search-law-title" style="display: flex">
-            <h2>簡易搜索</h2>
-          </div>
-          <ul class="law-block-lines">
-            <li class="law-block-line">輸入你想要找的法條</li>
-            <li class="law-block-line">與條號</li>
-            <li class="law-block-line">即可獲取</li>
-          </ul>
-        </div>
+  <div id="enter-area" class="content-area" style="display: none">
+    <div id="login-container">
+      <div id="login-or-register">
+        <button id="login">登入</button>
+        <button id="register">註冊</button>
       </div>
-      <i class="fa-solid fa-caret-left pre-but"></i>
-      <i class="fa-solid fa-caret-right next-but"></i>
+      <form id="enter-form" style="display: flex;">
+        <input id="enter-email" type="email" placeholder="email">
+        <input id="enter-password" type="password" placeholder="密碼">
+        <button type="submit">登入</button>
+      </form>
+      <form id="register-form" style="display: none;">
+        <input id="register-name" placeholder="用戶名稱">
+        <input id="register-email" type="email" placeholder="email">
+        <input id="register-password" type="password" placeholder="密碼">
+        <button type="submit">註冊</button>
+      </form>
+      <a href="">忘記密碼?</a>
     </div>
-
-
-
-    <form id="search-law-form">
-      <input list="law-name-data" id="chapter">
-      <datalist id="law-name-data">
-      </datalist>
-      <input type="number" id='num' placeholder="條目" required></input>
-      <button type="submit">查詢</button>
-    </form>
+    <div id="personal-data" style="display: none">
+      <h3>登入狀態：</h3>
+      <h3>用戶名字：<span id="user_name"></span></h3>
+      <h3>用戶郵箱：<span id="user_email"></span></h3>
+      <button id="log-out">登出</button>
+    </div>
   </div>
 
-</div>
 
-<div id="record-area" style="display: none;">
+  <div id="search-area" class="content-area">
+    <!-- 表格: 輸入要獲取的法條 -->
+    <div class="top-search-law-area-container">
 
-  <ul id="dir-nav">
-    <li class="dir-nav-li" id="my-dir-li"><a>我的</a></li>
-    <li class="dir-nav-li" id="public-dir-li"><a>畫廊</a></li>
-  </ul>
+      <!-- 印出法條 -->
+      <div id="result-area">
+        <div class="top-search-law-area">
+          <div class="law-content-area">
+            <div class="top-search-law-title" style="display: flex">
+              <h2>簡易搜索</h2>
+            </div>
+            <ul class="law-block-lines">
+              <li class="law-block-line">輸入你想要找的法條</li>
+              <li class="law-block-line">與條號</li>
+              <li class="law-block-line">即可獲取</li>
+            </ul>
+          </div>
+        </div>
+        <i class="fa-solid fa-caret-left pre-but"></i>
+        <i class="fa-solid fa-caret-right next-but"></i>
+      </div>
 
-  <div id="public-folder" style="display: none">
-    <div id="public-folder-find-page">
-      <form id="public-folder-search">
-        <input id="public-folder-name">
+
+
+      <form id="search-law-form">
+        <input list="law-name-data" id="chapter">
+        <datalist id="law-name-data">
+        </datalist>
+        <input type="number" id='num' placeholder="條目" required></input>
         <button type="submit">查詢</button>
       </form>
-      <div id="public-dir-display"></div>
     </div>
 
-    <div id="in-public-folder">
-      <div id="in-public-folder-header">
-        <h3 id="in-public-folder-name"></h3>
-        <div id="in-public-folder-writer"></div>
+  </div>
+
+  <div id="record-area" style="display: none;">
+
+    <ul id="dir-nav">
+      <li class="dir-nav-li" id="my-dir-li"><a>我的</a></li>
+      <li class="dir-nav-li" id="public-dir-li"><a>畫廊</a></li>
+    </ul>
+
+    <div id="public-folder" style="display: none">
+      <div id="public-folder-find-page">
+        <form id="public-folder-search">
+          <input id="public-folder-name">
+          <button type="submit">查詢</button>
+        </form>
+        <div id="public-dir-display"></div>
       </div>
-      <ul class="public-folder-nav">
-        <li id="back_to_public_folder">返回</li>
-        <li id="public-folder-file-li" class="record-li">文件</li>
-      </ul>
-      <div id="public-folder-file">
-        <nav id="public-file-nav">
-          <button id="public-folder-ham"></button>
-          <ul id="public-folder-file-nav">
-          </ul>
-        </nav>
-        <div id="public-folder-file-word-area">
-          <h1 id="public-folder-file-title"></h1>
-          <div id=content-table-area>
-            <h3>content table</h3>
-            <ul id="content-table"></ul>
+
+      <div id="in-public-folder">
+        <div id="in-public-folder-header">
+          <h3 id="in-public-folder-name"></h3>
+          <div id="in-public-folder-writer"></div>
+        </div>
+        <ul class="public-folder-nav">
+          <li id="back_to_public_folder">返回</li>
+          <li id="public-folder-file-li" class="record-li">文件</li>
+        </ul>
+        <div id="public-folder-file">
+          <nav id="public-file-nav">
+            <button id="public-folder-ham"></button>
+            <ul id="public-folder-file-nav">
+            </ul>
+          </nav>
+          <div id="public-folder-file-word-area">
+            <h1 id="public-folder-file-title"></h1>
+            <div id="public-using-law"></div>
+            <div id=content-table-area>
+              <h3>content table</h3>
+              <ul id="content-table"></ul>
+            </div>
+            <div id="public-folder-ck" class="ck-content ck-editor__editable ck"></div>
           </div>
-          <div id="public-folder-ck"  class="ck-content ck-editor__editable ck"></div>  
         </div>
       </div>
-    </div>
 
-  </div>
-
-
-  <ul id="dir" style="display: grid;">
-    <li class="add-dir"></li>
-  </ul>
-
-  <div id="in_folder" style="display: none">
-    <div id="in_folder_title">
-      <h3><span id="folder-name"></span></h3>
-      <ul class="record-nav">
-        <li id="back_to_folder">返回</li>
-        <li id="record-editor-btn" class="record-li">文件</li>
-        <li id="record-card-btn" class="record-li active2">卡片</li>
-        <li id="delete-dir">刪除</li>
-      </ul>
     </div>
 
 
-  <div id="file" style="display:none">
-    <div id="file_display">
-      <h2 id="file-nav">file-list<span id="file-toggle"><i class="fa-solid fa-caret-down"></i></span></h2>
-      <ul id="file-list"></ul>
-    </div>
-    <div id="record-editor">
-      <div id="editor-tool-bar">
-        <h2 id="file_name"></h2>
-        <button id="record-viewer-tools-delete">刪除</button>
-        <button id="record-viewer-tools-edit">編輯</button>
+    <ul id="dir" style="display: grid;">
+      <li class="add-dir"></li>
+    </ul>
+
+    <div id="in_folder" style="display: none">
+      <div id="in_folder_title">
+        <h3><span id="folder-name"></span></h3>
+        <ul class="record-nav">
+          <li id="back_to_folder">返回</li>
+          <li id="record-editor-btn" class="record-li">文件</li>
+          <li id="record-card-btn" class="record-li active2">卡片</li>
+          <li id="delete-dir">刪除</li>
+        </ul>
       </div>
-      <div id="record-viewer">
-        <div id="record-viewer-block">
-          <h1 id="private-folder-title"></h1>
-          <div id=private-content-table-area>
-            <h3>content table</h3>
-            <ul id="private-content-table"></ul>
+
+
+      <div id="file" style="display:none">
+        <div id="file_display">
+          <h2 id="file-nav">file-list<span id="file-toggle"><i class="fa-solid fa-caret-down"></i></span></h2>
+          <ul id="file-list"></ul>
+        </div>
+        <div id="record-editor">
+                   <div id="record-viewer">
+            <div id="record-viewer-block">
+ <div id="editor-tool-bar">
+             <h1 id="private-folder-title"></h1>
+            <button id="record-viewer-tools-delete">刪除</button>
+            <button id="record-viewer-tools-edit">編輯</button>
           </div>
-          <div id="word-area" class="ck-content ck-editor__editable ck"></div>
+
+              <div id="private-using-law"></div>
+              <div id="private-content-table-area">
+                <h3>content table</h3>
+                <ul id="private-content-table"></ul>
+              </div>
+              <div id="word-area" class="ck-content ck-editor__editable ck"></div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-    <div id="record-writer" style="display: none">
-      <div id="editor-area" style="display: flex">
-        <div id="markdown"></div>
+      <div id="record-writer" style="display: none">
+        <div id="editor-area" style="display: flex">
+          <div id="markdown"></div>
+        </div>
+        <button id="confirm-edit">Save</button>
       </div>
-      <button id="confirm-edit">Save</button>
+
+
+      <div id="record_table"></div>
+
     </div>
 
 
-    <div id="record_table"></div>
+
 
   </div>
 
 
-
-
-</div>
-
-
-<div id="test-area" style="display: none;">
-  <div id="law-search-area">
-    <form id="law-search-area-form">
-      <input list="law-name-data" id="search-chapter">
-      <button type="submit">查詢</button>
-      <button type="reset" id="reset">清除</button>
-    </form>
+  <div id="test-area" style="display: none;">
+    <div id="law-search-area">
+      <form id="law-search-area-form">
+        <input list="law-name-data" id="search-chapter">
+        <button type="submit">查詢</button>
+        <button type="reset" id="reset">清除</button>
+      </form>
       <ul class="law-search-area-nav">
         <li id="all-lines-nav"><a class="active">全部</a></li>
         <li id="chapter-nav"><a>按章節</a></li>
         <li id="text-nav"><a>文字查詢</a></li>
         <li id="about-nav"><a>相關資訊</a></li>
       </ul>
-    <div class="law-search-area-result">
-      <div id="all-lines-area">
-        <div id="all-lines"></div>
-      </div>
-      <div id="law-show-area" style="display: none;">
-        <form id="law-show-area-form">
-          <input list="chapter-name-data" id="chapter-name">
-          <datalist id="chapter-name-data"></datalist>
-          <button type="submit">查詢</button>
-          <button id="show-chapter">章節</button>
-        </form>
-        <div id="chapter-ul" style="display: none"></div>
-        <div id="ccc" style="display: flex;">
-          <div id="ttt" style="flex: 0 0 90%;"></div>
+      <div class="law-search-area-result">
+        <div id="all-lines-area">
+          <div id="all-lines"></div>
         </div>
-      </div>
-      <div id="search-by-text-area" style="display: none">
-        <form id="law-search-text-form">
-          <input id="text">
-          <button type="submit">查詢</button>
-        </form>
-        <div id="law-search-text-result">
-
+        <div id="law-show-area" style="display: none;">
+          <form id="law-show-area-form">
+            <input list="chapter-name-data" id="chapter-name">
+            <datalist id="chapter-name-data"></datalist>
+            <button type="submit">查詢</button>
+            <button id="show-chapter">章節</button>
+          </form>
+          <div id="chapter-ul" style="display: none"></div>
+          <div id="ccc" style="display: flex;">
+            <div id="ttt" style="flex: 0 0 90%;"></div>
+          </div>
         </div>
-      </div>
-      <div id="about-area" style="display: none">
-        <dl>
-          <dt>法條名稱</dt>
-          <dd>中華民國刑法</dd>
-        </dl>
+        <div id="search-by-text-area" style="display: none">
+          <form id="law-search-text-form">
+            <input id="text">
+            <button type="submit">查詢</button>
+          </form>
+          <div id="law-search-text-result">
 
-        <dl>
-          <dt>法條原網址</dt>
-          <dd>http://localhost:1420/?</dd>
-        </dl>
+          </div>
+        </div>
+        <div id="about-area" style="display: none">
+          <dl>
+            <dt>法條名稱</dt>
+            <dd>中華民國刑法</dd>
+          </dl>
 
-        <dl>
-          <dt>更新時間</dt>
-          <dd>2024/10/15</dd>
-        </dl>
+          <dl>
+            <dt>法條原網址</dt>
+            <dd>http://localhost:1420/?</dd>
+          </dl>
+
+          <dl>
+            <dt>更新時間</dt>
+            <dd>2024/10/15</dd>
+          </dl>
+        </div>
       </div>
     </div>
+
+
   </div>
 
+  <div id="one_file">
 
-</div>
-
-<div id="one_file">
-
-</div>
+  </div>
 
 
 
@@ -278,4 +282,5 @@
 
 
 </body>
+
 </html>

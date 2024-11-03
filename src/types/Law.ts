@@ -52,10 +52,11 @@ export class Law {
 
         buffer += `</ul>`;
 
+        
         // 完整的卡片結構
         let card = `
         <div class="law-block-content-multiple">
-          <p class="law-block-chapter"><span class="law-block-chapter">${this.chapter}</span>第${this.num}條</p>
+          <p class="law-block-chapter-num"><span class="law-block-chapter">${this.chapter}</span>第<span class="law-block-num">${this.num}</span>條</p>
           ${buffer}
         </div>
     `;

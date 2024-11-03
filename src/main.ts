@@ -1,14 +1,14 @@
 // otherFile.js
 const config = {
-    apiUrl: " https://deploylawweb-production.up.railway.app"
+    apiUrl: "https://deploylawweb-production.up.railway.app"
 };
 // https://deploylawweb-production.up.railway.app
 // http://127.0.0.1:8080
 
-import {File, get_file} from './types/File.ts';
+import {File, get_file, add_file, update_content} from './types/File.ts';
 import $ from 'jquery';
 import {Account} from "./types/account.ts";
-
+import {catchError} from "./types/Error.ts";
 
 
 
@@ -509,7 +509,7 @@ $(document).ready(function() {
             let parentText = $(this).find('a').first().text().trim();
             fullPath = parentText + "/" + fullPath;
         });
-
+const a = "p";
         // 輸出完整路徑
         fullPath = fullPath.slice(0, -1);
         const chapter1 = $("#search-chapter").val() as string;
@@ -606,14 +606,14 @@ async function get_file_list(user_name: string, dir: string) {
 
 $(document).on('click', '#file-list > li > a', async function () {
    const id = account.user_name + "-" + $("#folder-name").text() + "-" + $(this).text();
-    const file = await get_file(config.apiUrl, id);
+    const [error, file] = await catchError(get_file(config.apiUrl, id));
     if(file) {
       $("#word-area").html(file.content);
       $("#private-content-table").html(file.css);
       $("#private-folder-title").html(file.file_name);
+      $("#private-using-law").html(file.content_nav);
     }
     $("#record-editor").css("display", "block");
-    $("#file_name").html($(this).text());
     $('.the-file a').removeClass('file-active');
     $(this).addClass('file-active');
 });
@@ -643,7 +643,7 @@ $(document).on('click', '.add-file > a', async function(){
     $(document).on('submit', '#create-file-form', async function (event) {
         event.preventDefault();
         const file_name = $("#add-file-name").val();
-        await add_file(account.user_name, $("#folder-name").text(), file_name);
+        await add_file(config.apiUrl, account.user_name, $("#folder-name").text(), file_name);
         await get_file_list(account.user_name, $("#folder-name").text());
         event.target.reset();
     });
@@ -969,81 +969,31 @@ $("#record-viewer-tools-edit").click(async function() {
     $("#record-writer").css("display", "block");
     $("#file").css("display", "none");
     $(".record-footer").css("display", "none");
-    let id = account.user_name+ "-" + $("#folder-name").text() + "-" + $("#file_name").text();
+    let id = account.user_name+ "-" + $("#folder-name").text() + "-" + $("#private-folder-title").text();
 
-
-    // 使用 fetch 發送 GET 請求
-    fetch(`${config.apiUrl}/file_html/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // 或 response.text() 如果期望的是文本
-        })
-        .then(async data => {
-            const content = File.from_api_v2(data).content;
-            await updateEditorContent(content);
-        })
-        .catch(error => {
-           
-            console.log("Error: " + error.message);
-        });
-});
+    var file = await get_file(config.apiUrl, id);
+    var content = file.content;
+    await updateEditorContent(content);
+    });
 
 
 // 處理確認修改筆記
 $("#confirm-edit").click(async function () {
     let text = $("#preview").html();
 
-    let id = account.user_name + "-" + $("#folder-name").text() + "-" + $("#file_name").text();
+    let id = account.user_name + "-" + $("#folder-name").text() + "-" + $("#private-folder-title").text();
     let content = editorInstance.getData();
 
     //更新筆記內容
-    async function update_content() {
-        try {
-            const response = await fetch(`${config.apiUrl}/file/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ content: content })
-            });
-            var css_from_response = await File.from_api_v2(await response.json());
-        } catch (error) {
-            alert("更新失败");
-            console.error("Error: ", error);
-        }
-    }
-
-    async function update_word_area() {
-        try {
-            const response = await fetch(`${config.apiUrl}/file_html/${id}`, {
-                method: 'GET'
-            });
-            if (!response.ok) {
-                throw new Error("获取数据失败");
-            }
-            const file = await get_file(config.apiUrl, id);
-            if(file) {
+    await update_content(config.apiUrl, id,content);
+    var file = await get_file(config.apiUrl, id);
+    if (file) {
               $("#word-area").html(file.content);
               $("#private-content-table").html(file.css);
               $("#private-folder-title").html(file.file_name);
-            }
+              $("#private-using-law").html(file.content_nav);
 
-            
-        } catch (error) {
-            console.error("Error: ", error);
-        }
     }
-
-// 依次调用两个函数
-    async function performUpdates() {
-        await update_content();
-        await update_word_area();
-    }
-
-    await performUpdates();
-
 
     $("#record-writer").css("display", "none");
     $("#file").css("display", "flex");
@@ -1071,35 +1021,13 @@ async function delete_file(user_name: string, directory: string, file_name: stri
 $(document).on('click', '#record-viewer-tools-delete', async function() {
     let x  = confirm("確認刪除?");
     if (x){
-        await delete_file(account.user_name, $("#folder-name").text(), $("#file_name").text());
+        await delete_file(account.user_name, $("#folder-name").text(), $("#private-folder-title").text());
         await get_file_list(account.user_name, $("#folder-name").text());
     }
 });
 
 
-async function add_file(user_name: string, directory: string, file_name: string) {
-    let id = user_name + "-" + directory + "-" + file_name;
-    const file = {id: id, content: "New content", css: "            .law-block {            color: white;            border: 1px solid white;            margin: 10px;        }                .multiple-block {            color: white;            border: 1px solid white;            margin: 10px;        }                .law-block-content-multiple {            border-bottom: 1px solid white;            margin-top: 5px;            margin-left: 5px;            margin-right: 5px;        }                .law-block-chapter {            font-weight: bold;        }                .law-block-chapter:hover {            cursor: pointer;            color: red;        }    ", user_name: user_name, directory: directory, file_name: file_name};
 
-    try {
-        await fetch(`${config.apiUrl}/file`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(file),
-        });
-        alert("成功加入");
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
-                       console.log("Error: " + error.message);
-        } else {
-            // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
-                       console.log("Error: ", error);
-        }
-    }
-}
 
 import { editorConfig } from './types/ck.ts';
 import {ClassicEditor, EditorConfig, Clipboard} from 'ckeditor5';
@@ -1342,6 +1270,8 @@ $(document).on('click', '#public-folder-file-nav > li > a',async function() {
          $("#public-folder-ck").html(file.content);
          $("#content-table").html(file.css);
          $("#public-folder-file-title").html(file.file_name);
+         $("#public-using-law").html(file.content_nav);
+
        }
 
 
@@ -1386,6 +1316,7 @@ $(document).ready( async function(){
          $("#public-folder-ck").html(file.content);
          $("#content-table").html(file.css);
          $("#public-folder-file-title").html(file.file_name);
+         $("#public-using-law").html(file.content_nav);
        }
      }
 
