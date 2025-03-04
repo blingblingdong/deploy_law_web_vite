@@ -1,6 +1,7 @@
 // otherFile.js
 const config = {
-    apiUrl: "https://deploylawweb-production.up.railway.app"
+    apiUrl: "http://127.0.0.1:8080"
+
 };
 // https://deploylawweb-production.up.railway.app
 // http://127.0.0.1:8080
@@ -9,7 +10,7 @@ import {File, get_file, add_file, update_content} from './types/File.ts';
 import $ from 'jquery';
 import {Account} from "./types/account.ts";
 import {catchError} from "./types/Error.ts";
-
+let private_file_list = [];
 
 
 /*帳號與初始設定區*/
@@ -527,15 +528,21 @@ const a = "p";
 // 進入
 $(document).on('click', '.the-dir', async function () {// 停止事件冒泡
     await loadQuestions($(this).text());
-    if (account.user_name) {
-        await get_file_list(account.user_name, $(this).text());
-    }
-    $("#in_folder").css("display", "block");
+    if (account.user_name){
+        await get_file_list(account.user_name, $(this).text()).then(
+        );
+    };
+    $("#in_folder").css("display", "block")
     $("#dir").css("display", "none");
+    $("#dir-nav").css("display", "none");
     $(".record-footer").css("display", "flex");
     $("#folder-name").html($(this).text());
     $(".header-container").addClass("hideproperty");
-});
+    // 讀取第一個文件
+    await get_file_list2(account.user_name, $(this).text());
+    await delay(2000);
+    await ggh();
+   });
 
 $(document).on('click', '#delete-dir', async function () {// 停止事件冒泡
     let dir = $("#folder-name").text();
@@ -587,7 +594,32 @@ $("#record-card-btn").click(function () {
     $("#file").css("display", "none");
 });
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+
+async function get_file_list2(user_name: string, dir: string) {
+    $.ajax({
+        url: `${config.apiUrl}/file_list2/${user_name}/${dir}`,
+        method: 'GET',
+        success: function (response) {
+          private_file_list = response;
+        },
+        error: function (xhr, status, error) {
+                       console.log("Error: " + error);
+        }
+    });
+}
+
+async function ggh() {
+ if (private_file_list.length > 0) {
+   // 1.顯示第ㄧ個文件
+   file_num = 0;
+   file_num_length = private_file_list.length;
+   await change_page(file_num);
+ } 
+}
 
 
 async function get_file_list(user_name: string, dir: string) {
@@ -644,8 +676,11 @@ $(document).on('click', '.add-file > a', async function(){
         event.preventDefault();
         const file_name = $("#add-file-name").val();
         await add_file(config.apiUrl, account.user_name, $("#folder-name").text(), file_name);
+        await delay(2000);
         await get_file_list(account.user_name, $("#folder-name").text());
-        event.target.reset();
+        await get_file_list2(account.user_name, $("#folder-name").text());
+        $("#popup-add-file").remove();
+        event.target.reset();     
     });
 });
 
@@ -666,6 +701,7 @@ $("#back_to_folder").click(async function () {
     $("#dir").css("display", "grid");
     $("#in_folder").css("display", "none");
     $(".header-container").removeClass("hideproperty");
+    $("#dir-nav").show();
     await load_all_dir();
 });
 
@@ -783,6 +819,7 @@ function showPopup() {
         }
     });
 }
+
 
 
 function hidePopup() {
@@ -1063,6 +1100,90 @@ $(document).on('click', '#ck-law-card', function () {
     show_lawcard_Popup();
 });
 
+document.addEventListener('keydown', function(event) {
+  // 例如，如果用戶按下 Ctrl+D
+  if (event.ctrlKey && event.key === 's') {
+    event.preventDefault();  // 阻止預設行為，例如阻止書籤對話框的出現
+    search_file_Popup();
+    // 在這裡添加更多的動作，如打開自訂對話框等
+  } else if(event.ctrlKey && event.key === 'l') {
+    event.preventDefault();
+editorInstance.model.change(writer => {
+        editorInstance.model.insertContent(writer.createText( 'law-card-insertion-place'));
+    });
+    show_lawcard_Popup(); 
+  }
+});
+
+$(document).on("click", "#show-file-list" ,function(){
+  search_file_Popup();
+})
+
+function search_file_Popup() {  
+    // 建立彈出視窗的 HTML
+    const popup_content = `
+        <div class="popup-content" id="search-file-popup-content">
+                <div class="popup-header">
+                    <h3>搜索文件</h3>
+                    <span class="close-btn" id="hide-popup-search-file">X</span>
+                </div>
+            <div class="popup-body">
+            <div class="dropdown">
+                <ul id="search-file-ul" class="dropdown-menu"></ul>
+            </div>
+                <div class="popup-footer">
+                   <button id="confirm_card">確定</button>
+                </div>
+            </div>
+        </div>`;
+
+
+    const popupHTML = `
+        <div class="popup" id="popup-search-file">
+              ${popup_content}
+        </div>
+    `;
+
+    // 插入彈出視窗到 body
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+    // 顯示彈出視窗
+    (document.getElementById('popup-search-file') as HTMLElement).style.display = 'flex';
+
+
+    $(document).on('click', '#hide-popup-search-file', function () {
+        $("#popup-search-file").remove();
+    });
+
+     private_file_list.forEach(item => {
+      const item2 = `<li class='search-file-item'><a>${item}</a></li>`
+      $("#search-file-ul").append(item2);
+    });
+    $("#search-file-ul").append("<li class='add-file'><a>新增文件</a></li>");
+
+
+    $(document).on('click', '#confirm_card', async function () {
+            });
+
+
+}
+
+
+$(document).on("click", ".search-file-item", async function(){
+   const id = account.user_name + "-" + $("#folder-name").text() + "-" + $(this).text();
+       const [error, file] = await catchError(get_file(config.apiUrl, id));
+    if(file) {
+      $("#word-area").html(file.content);
+      $("#private-content-table").html(file.css);
+      $("#private-folder-title").html(file.file_name);
+      $("#private-using-law").html(file.content_nav);
+    }
+    $("#record-editor").css("display", "block");
+    $('.the-file a').removeClass('file-active');
+    $(private_file_list[0]).addClass('file-active');
+    $("#popup-search-file").remove();
+});
+
 
 
 
@@ -1077,7 +1198,7 @@ function show_lawcard_Popup() {
             <div class="popup-body">
                 <form id="insert-law-card">
                     <input list="law-name-data" id="insert-law-card-chapter">
-                    <datalist id="law-name-data">
+                    <datalist id="law-name-data"> 
                         <option value="民法">
                         <option value="中華民國刑法">
                         <option value="憲法">
@@ -1106,7 +1227,7 @@ function show_lawcard_Popup() {
             <div id="law-card-flex" style="display: flex; flex-direction: row">      
                 ${popup_preview}
                 ${popup_content}
-            </div>
+      /    </div>
         </div>
     `;
 
@@ -1323,3 +1444,94 @@ $(document).ready( async function(){
     }
 
    });
+
+
+let file_num : number = 0;
+let file_num_length : number = 10;
+
+$(document).on('click', '#next-file', async function() {
+  if(file_num_length == file_num +1){
+    file_num = 0;
+  } else {
+    file_num +=1;
+  }
+  await change_page(file_num);
+});
+
+$(document).on('click', '#last-file', async function() {
+    if(0 == file_num ){
+    file_num = file_num_length -1;
+  } else {
+    file_num -=1;
+  }
+  await change_page(file_num);
+
+});
+
+
+async function change_page(num: number) {  
+    const id = account.user_name + "-" + $("#folder-name").text() + "-" + private_file_list[num];
+       const [error, file] = await catchError(get_file(config.apiUrl, id));
+    if(file) {
+      $("#word-area").html(file.content);
+      $("#private-content-table").html(file.css);
+      $("#private-folder-title").html(file.file_name);
+      $("#private-using-law").html(file.content_nav);
+    }
+    $("#record-editor").css("display", "block");
+    $('.the-file a').removeClass('file-active');
+    $(private_file_list[0]).addClass('file-active');
+
+}
+
+async function change_file_name(old_name: String, new_name: String) {
+  let id =  account.user_name + "-" + $("#folder-name").text() + "-" + old_name;
+   $.ajax({ 
+        url: `${config.apiUrl}/file_name/${id}/${new_name}`,
+        method: 'PUT',
+        success: function (response) {
+              let file = File.from_api_v2(response);
+              file.file_name;
+      }     });
+}
+
+$(document).on('click', '#private-folder-title', function () {
+    const popHTML = `
+                <div class="popup" id="popup_change_file_name">
+                <div class="popup-content">
+                <div class="popup-header">
+                    <h3>更改文件名</h3>
+                    <span class="close-btn" id="hidePopup_change_file_name">X</span>
+                </div>
+                <div class="popup-body">
+                    <form id="chage_file_name_form" style="display: flex; flex-direction: column;">
+                        <input type="text" id="new_file_name" placeholder="目錄名稱" required>
+                        <button type="submit">更新</button>
+                    </form>
+                </div>
+                </div>
+                </div>`
+    document.body.insertAdjacentHTML('beforeend', popHTML);
+
+    // 顯示彈出視窗
+    (document.getElementById('popup_change_file_name') as HTMLElement).style.display = 'flex';
+
+    $(document).on('submit', '#chage_file_name_form', async function (event) {
+        event.preventDefault();
+        const old_name = $("#private-folder-title").text();
+        const new_name = $("#new_file_name").val();
+        await change_file_name(old_name,new_name);
+        await delay(2000); 
+        await get_file_list2(account.user_name, $("#folder-name").text());
+        await get_file_list(account.user_name, $("#folder-name").text());
+        $("#private-folder-title").html(new_name);
+        $("#popup_change_file_name").remove();
+        event.target.reset();
+    });
+});
+
+$(document).on('click', '#hidePopup_change_file_name', function () {
+    $("#popup_change_file_name").remove();
+});
+
+

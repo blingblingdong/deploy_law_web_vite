@@ -12,8 +12,8 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap');
   </style>
-  <script type="module" crossorigin src="/assets/index-4nG_uk1e.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-DlQHgKDc.css">
+  <script type="module" crossorigin src="/assets/index-BwBpKeyd.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-AekpSxlq.css">
 </head>
 
 <body>
@@ -99,7 +99,7 @@
         <input list="law-name-data" id="chapter">
         <datalist id="law-name-data">
         </datalist>
-        <input type="number" id='num' placeholder="條目" required></input>
+        <input type="text" id='num' placeholder="條目" required></input>
         <button type="submit">查詢</button>
       </form>
     </div>
@@ -162,14 +162,15 @@
         <ul class="record-nav">
           <li id="back_to_folder">返回</li>
           <li id="record-editor-btn" class="record-li">文件</li>
+          <li id="show-file-list" class="record-li">目錄</li>
           <li id="record-card-btn" class="record-li active2">卡片</li>
           <li id="delete-dir">刪除</li>
         </ul>
       </div>
 
 
-      <div id="file" style="display:none">
-        <div id="file_display">
+      <div id="file">
+        <div id="file_display" style="display:none">
           <h2 id="file-nav">file-list<span id="file-toggle"><i class="fa-solid fa-caret-down"></i></span></h2>
           <ul id="file-list"></ul>
         </div>
@@ -177,11 +178,13 @@
                    <div id="record-viewer">
             <div id="record-viewer-block">
  <div id="editor-tool-bar">
+             <i class="fa-solid fa-caret-left" id="last-file"></i>
              <h1 id="private-folder-title"></h1>
+             <i class="fa-solid fa-caret-right" id="next-file"></i>
             <button id="record-viewer-tools-delete">刪除</button>
             <button id="record-viewer-tools-edit">編輯</button>
+            <button id="record-viewer-tools-changeName">改名</button>
           </div>
-
               <div id="private-using-law"></div>
               <div id="private-content-table-area">
                 <h3>content table</h3>
@@ -201,7 +204,7 @@
       </div>
 
 
-      <div id="record_table"></div>
+      <div id="record_table" style="display:none"></div>
 
     </div>
 
@@ -274,6 +277,7 @@
   <div id="one_file">
 
   </div>
+  <datalist id="file-name-data"></datalist> 
 
 
 

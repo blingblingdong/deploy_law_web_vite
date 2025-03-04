@@ -4,8 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/ff.css">
-  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.1/ckeditor5.css">
   <link rel="stylesheet" href="css/record.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -100,7 +98,7 @@
         <input list="law-name-data" id="chapter">
         <datalist id="law-name-data">
         </datalist>
-        <input type="number" id='num' placeholder="條目" required></input>
+        <input type="text" id='num' placeholder="條目" required></input>
         <button type="submit">查詢</button>
       </form>
     </div>
@@ -163,14 +161,15 @@
         <ul class="record-nav">
           <li id="back_to_folder">返回</li>
           <li id="record-editor-btn" class="record-li">文件</li>
+          <li id="show-file-list" class="record-li">目錄</li>
           <li id="record-card-btn" class="record-li active2">卡片</li>
           <li id="delete-dir">刪除</li>
         </ul>
       </div>
 
 
-      <div id="file" style="display:none">
-        <div id="file_display">
+      <div id="file">
+        <div id="file_display" style="display:none">
           <h2 id="file-nav">file-list<span id="file-toggle"><i class="fa-solid fa-caret-down"></i></span></h2>
           <ul id="file-list"></ul>
         </div>
@@ -178,11 +177,13 @@
                    <div id="record-viewer">
             <div id="record-viewer-block">
  <div id="editor-tool-bar">
+             <i class="fa-solid fa-caret-left" id="last-file"></i>
              <h1 id="private-folder-title"></h1>
+             <i class="fa-solid fa-caret-right" id="next-file"></i>
             <button id="record-viewer-tools-delete">刪除</button>
             <button id="record-viewer-tools-edit">編輯</button>
+            <button id="record-viewer-tools-changeName">改名</button>
           </div>
-
               <div id="private-using-law"></div>
               <div id="private-content-table-area">
                 <h3>content table</h3>
@@ -202,7 +203,7 @@
       </div>
 
 
-      <div id="record_table"></div>
+      <div id="record_table" style="display:none"></div>
 
     </div>
 
@@ -275,6 +276,7 @@
   <div id="one_file">
 
   </div>
+  <datalist id="file-name-data"></datalist> 
 
   <script type="module" src="/src/main.ts"></script>
 

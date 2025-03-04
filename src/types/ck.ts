@@ -132,7 +132,7 @@ export const editorConfig = {
     simpleUpload: {
 
         // The URL that the images are uploaded to.
-        uploadUrl: ' https://deploylawweb-production.up.railway.app/upload_image/ck/image',
+        uploadUrl: 'https://deploylawweb-production.up.railway.app/upload_image/ck/image',
 
         // Enable the XMLHttpRequest.withCredentials property.
         withCredentials: false,
