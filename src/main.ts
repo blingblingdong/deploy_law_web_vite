@@ -237,6 +237,8 @@ $(".user-btn").click(function () {
     (document.getElementById('record-area') as HTMLElement).style.display = 'none';
     (document.getElementById('test-area')  as HTMLElement).style.display = 'none';
     (document.getElementById('enter-area')  as HTMLElement).style.display = 'block';
+     (document.getElementById('gallery-area') as HTMLElement).style.display = 'none';
+
 });
 
 $(".search-btn").click(function () {
@@ -244,6 +246,8 @@ $(".search-btn").click(function () {
     (document.getElementById('record-area') as HTMLElement).style.display = 'none';
     (document.getElementById('test-area') as HTMLElement).style.display = 'none';
     (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
+   (document.getElementById('gallery-area') as HTMLElement).style.display = 'none';
+
 });
 
 $(".test-btn").click(function () {
@@ -251,12 +255,27 @@ $(".test-btn").click(function () {
     (document.getElementById('record-area') as HTMLElement).style.display = 'none';
     (document.getElementById('test-area') as HTMLElement).style.display = 'flex';
     (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('gallery-area') as HTMLElement).style.display = 'none';
+
 });
+
+$(".gallery-btn").click(function () {
+    (document.getElementById('search-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('record-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('gallery-area') as HTMLElement).style.display = 'block';
+    (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
+    (document.getElementById('test-area') as HTMLElement).style.display = 'none';
+
+});
+
+
 
 $(".record-btn").click(async function () {
     (document.getElementById('search-area')  as HTMLElement).style.display = 'none';
     (document.getElementById('test-area')  as HTMLElement).style.display = 'none';
     (document.getElementById('enter-area')  as HTMLElement).style.display = 'none';
+    (document.getElementById('gallery-area') as HTMLElement).style.display = 'none';
+
     if (enter_or_not) {
         (document.getElementById('record-area')  as HTMLElement).style.display = 'block';
 
@@ -1420,15 +1439,13 @@ $(document).ready( async function(){
                        console.log("Error: " + error);
         }
     });
-    $("#public-folder").show();
-    $("#dir").hide();
+    $("#gallery-area").show();
     $("#public-folder-find-page").hide();
     $("in-public-folder").show();
     $("#in-public-folder-name").html(directory);
     $("#in-public-folder-writer").html(userid);
     $("#search-area").hide();
-    $("#record-area").show();
-
+   
     if(file_name) {
        const id = userid + "-" + directory + "-" + file_name;
        const file = await get_file(config.apiUrl, id);
@@ -1532,5 +1549,99 @@ $(document).on('click', '#private-folder-title', function () {
 $(document).on('click', '#hidePopup_change_file_name', function () {
     $("#popup_change_file_name").remove();
 });
+
+$(document).on('click', '.share-file', function(){
+  const folder = $("#in-public-folder-name").text();
+  const title = $("#public-folder-file-title").text();
+  const writer = $("#in-public-folder-writer").text();
+  const url = `https://rustlawweb.netlify.app/?user=${writer}&dir=${folder}&file_name=${title}`
+  navigator.share({
+    url: url,
+  })
+})
+
+$(document).on('click', '#private-share-file', function(){
+  const folder = $("#folder-name").text();
+  const title = $("#private-folder-title").text();
+  const url = `https://rustlawweb.netlify.app/?user=${account.user_name}&dir=${folder}&file_name=${title}`
+  navigator.share({
+    url: url,
+  })
+})
+
+$(document).on("click", "#public-search-file" ,function(){
+  search_file_Popup_public();
+})
+
+async function search_file_Popup_public() { 
+    const writer = $("#in-public-folder-writer").text();
+    const folder = $("#in-public-folder-name").text();
+    let public_file_list: any;
+
+    //1.獲取file_list
+     $.ajax({
+        url: `${config.apiUrl}/file_list2/${writer}/${folder}`,
+        method: 'GET',
+        success: function (response) {
+          public_file_list = response;
+        },
+        error: function (xhr, status, error) {
+                       console.log("Error: " + error);
+        }
+    });
+
+    await delay(1000);
+
+    // 建立彈出視窗的 HTML
+    const popup_content = `
+        <div class="popup-content" id="search-file-popup-content-public">
+                <div class="popup-header">
+                    <h3>搜索文件</h3>
+                    <span class="close-btn" id="hide-popup-search-file-public">X</span>
+                </div>
+            <div class="popup-body">
+            <div class="dropdown">
+                <ul id="search-file-ul-public" class="dropdown-menu"></ul>
+            </div>
+            </div>
+        </div>`;
+
+
+    const popupHTML = `
+        <div class="popup" id="popup-search-file-public">
+              ${popup_content}
+        </div>
+    `;
+
+    // 插入彈出視窗到 body
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+    // 顯示彈出視窗
+    (document.getElementById('popup-search-file-public') as HTMLElement).style.display = 'flex';
+
+
+    $(document).on('click', '#hide-popup-search-file-public', function () {
+        $("#popup-search-file-public").remove();
+    });
+
+
+     public_file_list.forEach(item => {
+      const item2 = `<li class='search-file-item-public'><a>${item}</a></li>`
+      $("#search-file-ul-public").append(item2);
+    });
+}
+
+
+$(document).on("click", ".search-file-item-public", async function(){
+   const id = account.user_name + "-" + $("#in-public-folder-name").text() + "-" + $(this).text();       const file = await get_file(config.apiUrl, id);
+       if (file) {
+         $("#public-folder-ck").html(file.content);
+         $("#content-table").html(file.css);
+         $("#public-folder-file-title").html(file.file_name);
+         $("#public-using-law").html(file.content_nav);
+         $("#popup-search-file-public").remove();
+       }
+});
+
 
 

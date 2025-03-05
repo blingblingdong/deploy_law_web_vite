@@ -29,12 +29,14 @@
       <li id="search-btn" class="main-li search-btn"><a>查詢</a></li>
       <li id="test-btn" class="main-li test-btn"><a>法條</a></li>
       <li id="record-btn" class="main-li record-btn"><a>資料夾</a></li>
+      <li id ="gallery-btn" class="main-li gallery-btn"><a>畫廊</a></li>
       <li id="user-btn" class="main-li user-btn"><a>訪客/登入</a></li>
     </ul>
     <ul class="sidebar" style="display: none">
       <li id="close-side-bar"><a>關閉</a></li>
       <li class="main-li search-btn"><a>查詢</a></li>
       <li class="main-li test-btn"><a>法條</a></li>
+      <li class="main-li gallery-btn"><a>畫廊</a></li>
       <li class="main-li record-btn"><a>資料夾</a></li>
       <li class="main-li user-btn"><a>訪客/登入</a></li>
     </ul>
@@ -105,14 +107,8 @@
 
   </div>
 
-  <div id="record-area" style="display: none;">
-
-    <ul id="dir-nav">
-      <li class="dir-nav-li" id="my-dir-li"><a>我的</a></li>
-      <li class="dir-nav-li" id="public-dir-li"><a>畫廊</a></li>
-    </ul>
-
-    <div id="public-folder" style="display: none">
+  <div id="gallery-area" style="display: none">
+   <div id="public-folder">
       <div id="public-folder-find-page">
         <form id="public-folder-search">
           <input id="public-folder-name">
@@ -126,18 +122,21 @@
           <h3 id="in-public-folder-name"></h3>
           <div id="in-public-folder-writer"></div>
         </div>
-        <ul class="public-folder-nav">
-          <li id="back_to_public_folder">返回</li>
-          <li id="public-folder-file-li" class="record-li">文件</li>
-        </ul>
-        <div id="public-folder-file">
-          <nav id="public-file-nav">
+          <div id="public-folder-file">
+          <nav id="public-file-nav" style='display:none'>
             <button id="public-folder-ham"></button>
             <ul id="public-folder-file-nav">
             </ul>
           </nav>
           <div id="public-folder-file-word-area">
-            <h1 id="public-folder-file-title"></h1>
+            <div id='public-folder-title-bar'>
+             <h1 id="public-folder-file-title"></h1>
+             <div id='title-bar-button-area'>
+              <button id='public-search-file'>目錄</button>
+              <button id='share-file' class='share-file'>分享</button>
+              <button id='back_to_public_folder'>返回</button>
+             </div>
+            </div>
             <div id="public-using-law"></div>
             <div id=content-table-area>
               <h3>content table</h3>
@@ -147,10 +146,10 @@
           </div>
         </div>
       </div>
-
     </div>
+  </div>
 
-
+  <div id="record-area" style="display: none;">
     <ul id="dir" style="display: grid;">
       <li class="add-dir"></li>
     </ul>
@@ -182,7 +181,7 @@
              <i class="fa-solid fa-caret-right" id="next-file"></i>
             <button id="record-viewer-tools-delete">刪除</button>
             <button id="record-viewer-tools-edit">編輯</button>
-            <button id="record-viewer-tools-changeName">改名</button>
+            <button id="private-share-file">分享</button>
           </div>
               <div id="private-using-law"></div>
               <div id="private-content-table-area">

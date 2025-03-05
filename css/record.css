@@ -1321,17 +1321,20 @@ table {
 }
 
 #public-folder-file-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    display: grid;
+    gap: 10px;
+    width: 100px;
     list-style: decimal;
-    padding-left: 10px;
+    padding-left: 20px;
+
 }
+
+
+
 
 #public-file-nav {
     padding-left: 5px;
-    width: 30%;
-}
+  }
 
 #public-folder-ham {
     display: none;
@@ -1362,6 +1365,10 @@ table {
 
     #public-folder-file-nav {
         display: none;
+           }
+
+    #public-folder-file-nav li {
+      padding-bottom: 5px;
     }
 
     #public-folder-file {
@@ -1885,6 +1892,9 @@ button[type="submit"] {
   width: 80%;
 }
 
+#search-file-popup-content-public {
+  width: 80%;
+}
 
 .dropdown {
   position: relative;
@@ -1902,17 +1912,32 @@ button[type="submit"] {
 
  #search-file-ul {
   display: grid;
+  max-height: 20%;
 }
 
+ #search-file-ul {
+  display: grid;
+  overflow-y: auto;
+  overflow: auto;
+  max-height: 600px;
+}
 
+ #search-file-ul-public {
+  display: grid;
+  overflow-y: auto;
+  overflow: auto;
+  max-height: 600px;
+}
 
 .dropdown-menu li {
   padding: 15px 20px;
   color: white;
+  width: 400px;
   margin-left: 0px;
   list-style: none;
   margin-bottom: 10px;
   border-left: 1px solid white;
+  overflow-y: auto;
 }
 
 
@@ -1922,3 +1947,59 @@ button[type="submit"] {
   background-color: #f5f5f5;
   color: black;
 }
+
+#public-folder-title-bar {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 0px;
+  flex-wrap: wrap;
+}
+
+#title-bar-button-area {
+  display: flex;
+  gap: 10px;
+}
+
+
+#title-bar-button-area button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid white;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    background-color: black;
+}
+
+#public-folder-title-bar button:hover {
+  background-color: white;
+  color: black;
+}
+
+
+@media only screen and (max-width: 500px) {
+   #title-bar-button-area button {
+      border: none;
+      font-size: 12px;
+      margin-top: 0px;
+    }
+
+    #public-folder-title-bar {
+    display: block;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 0px;
+    flex-wrap: wrap;
+    }
+
+    #public-folder-file-title {
+      margin-bottom: 0px;
+    }
+
+
+}
+
