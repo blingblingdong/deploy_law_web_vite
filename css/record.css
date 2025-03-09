@@ -768,9 +768,7 @@
 @media only screen and (max-width: 600px) {
   .header-title {
     font-size: 30px;
-    position: absolute;
-    left: 30%;
-  }
+     }
 }
 
 
@@ -2130,5 +2128,4 @@ input:-webkit-autofill:active {
 
 .main-li a {
   z-index: 9999 !important;
-  position: relative;
-}
+  position: relativeri}
