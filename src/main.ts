@@ -1,6 +1,6 @@
 // otherFile.js
 const config = {
-    apiUrl: "https://deploylawweb-production.up.railway.app"
+    apiUrl: "http://127.0.0.1:8080"
 };
 // https://deploylawweb-production.up.railway.app
 // http://127.0.0.1:8080
@@ -88,6 +88,8 @@ $(document).ready(async function() {
             $("#personal-data").css("display", "flex");
             $("#user_name").html(user_name);
             $("#user_email").html(email);
+            $('#user-png').show();
+            $('#guest-png').hide();
         } else {
 
         }
@@ -199,7 +201,7 @@ let intro = ` <div class="top-search-law-area">
       <i class="fa-solid fa-caret-left pre-but"></i>
       <i class="fa-solid fa-caret-right next-but"></i>`
 law_vec.push(intro);
-
+/*
 let search_law_form_element = document.getElementById('search-law-form');
 if (search_law_form_element) {
     search_law_form_element.addEventListener('submit', async (event) => {
@@ -221,6 +223,30 @@ if (search_law_form_element) {
 
     });
 }
+*/
+
+$(document).ready(async function(){
+  $("#chapter, #num").on('input', async function(){
+    var chapter = $('#chapter').val().trim();
+    var num = $('#num').val().trim();
+    if(chapter !== "" && num !== "") {
+       let law = await load_law(chapter, num, config.apiUrl) as Law;
+       const tableHtml = law.one_show(enter_or_not);
+        let buffer = `<ul class="law-block-lines">`;
+        // 使用 for...of 來迭代 lines 向量，並將每一行包裝在 <li> 中
+        for (let line of law.lines) {
+            buffer += `<li class="law-block-line">${line}</li>`;
+        }
+
+        buffer += `</ul>`;
+
+       $("#result-area").html(buffer);
+       law_vec.push(tableHtml);
+       counter += 1;
+
+    }
+  })
+})
 
 $("#close-side-bar").click(function () {
    $(".sidebar").hide();
@@ -558,7 +584,10 @@ $(document).on('click', '.the-dir', async function () {// 停止事件冒泡
     $(".header-container").addClass("hideproperty");
     // 讀取第一個文件
     await get_file_list2(account.user_name, $(this).text());
-    await delay(2000);
+    
+        $("#loading").css("display", "block");
+        await delay(2000);
+        $("#loading").css("display", "none");
     await ggh();
    });
 
@@ -694,7 +723,9 @@ $(document).on('click', '.add-file > a', async function(){
         event.preventDefault();
         const file_name = $("#add-file-name").val();
         await add_file(config.apiUrl, account.user_name, $("#folder-name").text(), file_name);
+        $("#loading").css("display", "block");
         await delay(2000);
+        $("#loading").css("display", "none");
         await get_file_list(account.user_name, $("#folder-name").text());
         await get_file_list2(account.user_name, $("#folder-name").text());
         $("#popup-add-file").remove();
@@ -888,9 +919,35 @@ $(document).on('click', '#confirmSelection', function () {
     $("#popup").remove();
 });
 
+async function update_dir(dir_name: string, pub: boolean, description: String) {
+  let id = account.user_name + "-" + dir_name;
+  const dir = {id:id, user_name: account.user_name, directory: dir_name, public: pub, description: description };
+try {
+        await fetch(`${config.apiUrl}/dir`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dir),
+        });
+        alert("修改成功");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
+                       console.log("Error: " + error.message);
+        } else {
+            // 如果錯誤不是 Error 對象，處理其他類型的錯誤或記錄通用錯誤信息
+          
+            console.log("Error: ", error);
+        }
+    }
+
+
+}
+
 async function create_dir(user_name: string, directory: string) {
-    let id = user_name + directory;
-    const dir = {id: id, user_name: user_name, directory: directory, public: false, description: ""}
+    let id = user_name + "-" + directory;
+    const dir = {id: id, user_name: user_name, directory: directory, public: true, description: "簡介"}
     try {
         await fetch(`${config.apiUrl}/dir`, {
             method: 'POST',
@@ -1537,7 +1594,9 @@ $(document).on('click', '#private-folder-title', function () {
         const old_name = $("#private-folder-title").text();
         const new_name = $("#new_file_name").val();
         await change_file_name(old_name,new_name);
-        await delay(2000); 
+         $("#loading").css("display", "block");
+        await delay(2000);
+        $("#loading").css("display", "none");
         await get_file_list2(account.user_name, $("#folder-name").text());
         await get_file_list(account.user_name, $("#folder-name").text());
         $("#private-folder-title").html(new_name);
@@ -1590,7 +1649,10 @@ async function search_file_Popup_public() {
         }
     });
 
-    await delay(1000);
+    
+        $("#loading").css("display", "block");
+        await delay(2000);
+        $("#loading").css("display", "none");
 
     // 建立彈出視窗的 HTML
     const popup_content = `
@@ -1644,4 +1706,29 @@ $(document).on("click", ".search-file-item-public", async function(){
 });
 
 
+
+$(document).on("click", "#about-dir", async function(){
+  $("#folder-information").show();
+
+  const dir_name = $("#folder-name").text();
+  const id = account.user_name + "-" + dir_name;
+  try {
+    let dir_information = await get_folder(id);
+    $("#folder-information-title").html(dir_information.directory);
+    $("#folder-information-description").html(dir_information.description);
+  } catch (error) {
+    console.error("Failed to fetch folder information:", error);
+    // 可以在這裡添加用戶錯誤處理的邏輯，比如顯示錯誤信息
+  }
+});
+
+async function get_folder(id) {
+  const response = await fetch(`${config.apiUrl}/dir_information/${id}`, {
+    method: 'GET'
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok: ' + response.statusText);
+  }
+  return response.json();
+}
 

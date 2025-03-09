@@ -12,17 +12,22 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap');
   </style>
-  <script type="module" crossorigin src="/assets/index-CTjBWfm_.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-DIG-Et4R.css">
+  <script type="module" crossorigin src="/assets/index-CuP7Gj1Z.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DQWXTtzO.css">
 </head>
 
 <body>
 
+  <div id="loading" style="display:none;">
+   <img src="/assets/loading-CU8LCFCs.gif" alt="Loading..." />
+  </div>
 
 
 
   <div class="header-container">
     <div class="header">
+      <img src='/assets/%E8%A8%AA%E5%AE%A2-Ce8-oFUJ.png' id='guest-png' class='user-btn'>
+      <img src='/assets/cat-C2dLnaGS.png' style='display:none' id='user-png' class='user-btn'>
       <div class="header-title">Rust Law Web</div>
     </div>
 
@@ -65,46 +70,33 @@
       <a href="">忘記密碼?</a>
     </div>
     <div id="personal-data" style="display: none">
-      <h3>登入狀態：</h3>
-      <h3>用戶名字：<span id="user_name"></span></h3>
-      <h3>用戶郵箱：<span id="user_email"></span></h3>
+      <img src='/assets/cat-C2dLnaGS.png' id=personal-png>
+      <h3><span id="user_name"></span></h3>
+      <p><span id="user_email"></span></p>
       <button id="log-out">登出</button>
     </div>
   </div>
 
 
-  <div id="search-area" class="content-area">
+  <div id="search-area">
     <!-- 表格: 輸入要獲取的法條 -->
-    <div class="top-search-law-area-container">
 
-      <!-- 印出法條 -->
-      <div id="result-area">
-        <div class="top-search-law-area">
-          <div class="law-content-area">
-            <div class="top-search-law-title" style="display: flex">
-              <h2>簡易搜索</h2>
-            </div>
-            <ul class="law-block-lines">
-              <li class="law-block-line">輸入你想要找的法條</li>
-              <li class="law-block-line">與條號</li>
-              <li class="law-block-line">即可獲取</li>
-            </ul>
-          </div>
-        </div>
-        <i class="fa-solid fa-caret-left pre-but"></i>
-        <i class="fa-solid fa-caret-right next-but"></i>
-      </div>
-
-
-
-      <form id="search-law-form">
+      
+    <div id="search-law-form">
+      <h2>快速查詢</h2>
+      <div id='chapter-input-wrapper'>
+        <a></a>
         <input list="law-name-data" id="chapter">
         <datalist id="law-name-data">
         </datalist>
-        <input type="text" id='num' placeholder="條目" required></input>
-        <button type="submit">查詢</button>
-      </form>
+      </div>
+      <div id='num-input-wrapper'>
+        <p>§</p>
+        <input id='num' placeholder="條目"></input>
+      </div>
     </div>
+
+     <div id='result-area'></div>
 
   </div>
 
@@ -163,7 +155,7 @@
           <li id="record-editor-btn" class="record-li">文件</li>
           <li id="show-file-list" class="record-li">目錄</li>
           <li id="record-card-btn" class="record-li active2">卡片</li>
-          <li id="delete-dir">刪除</li>
+          <li id="about-dir" class="record-li">關於</li>
         </ul>
       </div>
 
@@ -200,6 +192,24 @@
           <div id="markdown"></div>
         </div>
         <button id="confirm-edit">Save</button>
+      </div>
+
+      <div id="folder-information" style='display: none'>
+        <div id="folder-information-flex">
+          <dl class="information-flex">
+            <dt>資料夾名</dt>
+            <dt id = "folder-information-title"></dt>
+          </dl>
+          <dl>
+            <dt>簡介</dt>
+            <dt id = "folder-information-description"></dt>
+          </dl>
+          <dl>
+            <dt>公開</dt>
+            <dt id = "folder-information-public"></dt>
+          </dl>
+        </div>
+        <button id="edit-folder-information"></button>
       </div>
 
 
@@ -276,7 +286,8 @@
   <div id="one_file">
 
   </div>
-  <datalist id="file-name-data"></datalist> 
+  <datalist id="file-name-data"></datalist>
+
 
 
 
