@@ -613,7 +613,7 @@
 
 #result-area {
     height: 450px;
-    overflow: auto;
+    overflow-y: auto;
     border: 0px solid #444;
     margin: 0px 30px;
 
@@ -672,6 +672,7 @@
 
 #search-law-form {
   margin-top: 50px;
+  margin-left: 10px;
  }
 
 #num-input-wrapper {
@@ -713,10 +714,6 @@
         display: none;
     }
 
-    #result-area {
-        width: 350px;
-        height: 350px;
-    }
 
     .law-block-lines {
         font-size: 14px;
@@ -1724,16 +1721,12 @@ body {
     flex: 0 0 55%;
 }
 
-#search-law-form button {
-    flex: 0 0 20%;
-}
 
 #search-area {
   display: flex;
   justify-content: flex-start; /* 水平居中 */
   flex-direction: column;
   gap: 20px;
-  margin-left: 50px;
 }
 
 #law-search-area-form button {
