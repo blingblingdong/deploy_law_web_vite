@@ -11,7 +11,7 @@ import {Account} from "./types/account.ts";
 import {catchError} from "./types/Error.ts";
 let private_file_list = [];
 
-
+    
 /*帳號與初始設定區*/
 
 // 設定三個全域變數
@@ -225,11 +225,22 @@ if (search_law_form_element) {
 }
 */
 
+function check_is_in_list(chapter: String) {
+      var data_list = $('#law-name-data > option').toArray();
+      var state: boolean = false;
+      data_list.forEach(item => {
+       if(item.value == chapter) {
+        state = true;
+      }
+    });
+    return state
+}
+
 $(document).ready(async function(){
   $("#chapter, #num").on('input', async function(){
     var chapter = $('#chapter').val().trim();
     var num = $('#num').val().trim();
-    if(chapter !== "" && num !== "") {
+    if(chapter !== "" && num !== "" && check_is_in_list(chapter)) {
        let law = await load_law(chapter, num, config.apiUrl) as Law;
        const tableHtml = law.one_show(enter_or_not);
         let buffer = `<ul class="law-block-lines">`;
@@ -268,7 +279,7 @@ $(".user-btn").click(function () {
 });
 
 $(".search-btn").click(function () {
-    (document.getElementById('search-area') as HTMLElement).style.display = 'initial';
+    (document.getElementById('search-area') as HTMLElement).style.display = 'flex';
     (document.getElementById('record-area') as HTMLElement).style.display = 'none';
     (document.getElementById('test-area') as HTMLElement).style.display = 'none';
     (document.getElementById('enter-area') as HTMLElement).style.display = 'none';
@@ -1016,7 +1027,7 @@ $(document).on('click', '.note-edit-btn', function () {
     const [element1, element2, element3, chapter, num] = ($(this).attr('id') as string).split('-');
     let note_area_id = "#law-note-area-" + chapter + "-" + num;
     let original_note = $(note_area_id).html();
-    const formHTML = `
+   const formHTML = `
         <form class="law-note-form" id="law-note-form-${chapter}-${num}">
             <textarea class="note-form-text" id="note-form-text-${chapter}-${num}">${original_note}</textarea>
             <button class="note-form-btn" type="submit"></button>
@@ -1731,4 +1742,15 @@ async function get_folder(id) {
   }
   return response.json();
 }
+
+$(document).ready(function() {
+    $('.main-li a').click(function() {
+        // 移除所有連結的 'active' 類別
+        $('.main-li a').removeClass('dir-nav-active');
+        // 為當前點擊的連結添加 'active' 類別
+        $(this).addClass('dir-nav-active');
+        $('.sidebar').css('display', 'none');
+
+    });
+});
 

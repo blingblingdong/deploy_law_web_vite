@@ -615,7 +615,8 @@
     height: 450px;
     overflow: auto;
     border: 0px solid #444;
-    margin: 0px 20px;
+    margin: 0px 30px;
+
 }
 
 .law-block-lines {
@@ -755,7 +756,13 @@
 }
 
 
+#small-header {
+  display: none;
+}
 
+option {
+  font-size: 20px;
+}
 
 
 .header-title {
@@ -768,7 +775,15 @@
 @media only screen and (max-width: 600px) {
   .header-title {
     font-size: 30px;
-     }
+  }
+
+  #big-header {
+    display: none;
+  }
+
+  #small-header {
+    display: flex;
+  }
 }
 
 
@@ -876,13 +891,15 @@ dd {
     padding-right: 50px;
 }
 
-@media only screen and (max-width: 400px) {
-    #in_folder_title{
-        display: block;
-    }
+@media only screen and (max-width: 600px) { 
 
     .record-nav {
         gap: 20px;
+    }
+
+    
+    .record-nav li {
+     font-size: 12px;
     }
 }
 
@@ -1056,20 +1073,42 @@ dd {
     border-radius: 5px;
 }
 
+#editor-tool-bar-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 #editor-tool-bar {
     display: flex;
     gap: 20px;
     align-items: center;
     margin-bottom: 0px;
     justify-content: flex-start;
-    color: black;
-}
+ }
 
 #editor-tool-bar h1 {
   color: white;
 }
 
-#editor-tool-bar button {
+@media only screen and (max-width: 600px) {
+  #editor-tool-bar h1 {
+    font-size: 25px;
+  }
+
+  #editor-tool-bar {
+    display: block;
+  }
+
+  #editor-tool-bar-buttons button {
+    font-size: 12px !important;
+    border: none !important;
+
+  }
+}
+
+
+#editor-tool-bar-buttons button {
     padding: 10px 20px;
     border-radius: 5px;
     border: 1px solid white;
@@ -1730,6 +1769,7 @@ button[type="submit"] {
 #dir {
     display: grid;
     gap: 20px;
+    padding: 0px;
     grid-template-columns: repeat(5, 1fr);
 }
 
@@ -2129,3 +2169,11 @@ input:-webkit-autofill:active {
 .main-li a {
   z-index: 9999 !important;
   position: relativeri}
+
+
+#record-area {
+  margin-left: 0px !important;
+  align-items: left;
+  align-content: left;
+  padding-left: 0px !important;
+}
