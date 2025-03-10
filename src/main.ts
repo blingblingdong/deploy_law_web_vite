@@ -1514,7 +1514,7 @@ $(document).ready( async function(){
     });
     $("#gallery-area").show();
     $("#public-folder-find-page").hide();
-    $("in-public-folder").show();
+    $("#in-public-folder").show();
     $("#in-public-folder-name").html(directory);
     $("#in-public-folder-writer").html(userid);
     $("#search-area").hide();
