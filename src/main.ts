@@ -596,7 +596,7 @@ $(document).on('click', '.the-dir', async function () {// 停止事件冒泡
     // 讀取第一個文件
     await get_file_list2(account.user_name, $(this).text());
     
-        $("#loading").css("display", "block");
+        $("#loading").css("display", "flex");
         await delay(2000);
         $("#loading").css("display", "none");
     await ggh();
@@ -734,7 +734,7 @@ $(document).on('click', '.add-file > a', async function(){
         event.preventDefault();
         const file_name = $("#add-file-name").val();
         await add_file(config.apiUrl, account.user_name, $("#folder-name").text(), file_name);
-        $("#loading").css("display", "block");
+        $("#loading").css("display", "flex");
         await delay(2000);
         $("#loading").css("display", "none");
         await get_file_list(account.user_name, $("#folder-name").text());
@@ -1442,23 +1442,28 @@ $(document).on('click', '.public-dir', async function() {
     const user = $(this).attr("id").split("-")[1];
     const dir_name = $(this).attr("id").split("-")[2];
     $("#in-public-folder").show();
-    $.ajax({
-        url: `${config.apiUrl}/file_list/${user}/${dir_name}`,
+    let public_file_list: any;
+
+    //1.獲取file_list
+     $.ajax({
+        url: `${config.apiUrl}/file_list2/${user}/${dir_name}`,
         method: 'GET',
         success: function (response) {
-            $("#public-folder-file-nav").html(response);
-         const list: HTMLElement[] = $("#public-folder-file-nav > li > a").toArray() as HTMLElement[];
-      if (list.length > 0) {
-      $(list[0]).css("color", "red");
-    
-      } else {
-      alert(0)
-        }
+          public_file_list = response;
         },
         error: function (xhr, status, error) {
                        console.log("Error: " + error);
         }
     });
+     await delay(2000);
+     const id = user + "-" + dir_name + "-" + public_file_list[0];       
+     const file = await get_file(config.apiUrl, id);
+       if (file) {
+         $("#public-folder-ck").html(file.content);
+         $("#content-table").html(file.css);
+         $("#public-folder-file-title").html(file.file_name);
+         $("#public-using-law").html(file.content_nav);
+    }
     $("#public-folder-find-page").hide();
     $("in-public-folder").show();
     $("#in-public-folder-name").html(dir_name);
@@ -1605,7 +1610,7 @@ $(document).on('click', '#private-folder-title', function () {
         const old_name = $("#private-folder-title").text();
         const new_name = $("#new_file_name").val();
         await change_file_name(old_name,new_name);
-         $("#loading").css("display", "block");
+         $("#loading").css("display", "flex");
         await delay(2000);
         $("#loading").css("display", "none");
         await get_file_list2(account.user_name, $("#folder-name").text());
@@ -1661,7 +1666,7 @@ async function search_file_Popup_public() {
     });
 
     
-        $("#loading").css("display", "block");
+        $("#loading").css("display", "flex");
         await delay(2000);
         $("#loading").css("display", "none");
 
@@ -1706,7 +1711,7 @@ async function search_file_Popup_public() {
 
 
 $(document).on("click", ".search-file-item-public", async function(){
-   const id = account.user_name + "-" + $("#in-public-folder-name").text() + "-" + $(this).text();       const file = await get_file(config.apiUrl, id);
+   const id = $("#in-public-folder-writer").text() + "-" + $("#in-public-folder-name").text() + "-" + $(this).text();       const file = await get_file(config.apiUrl, id);
        if (file) {
          $("#public-folder-ck").html(file.content);
          $("#content-table").html(file.css);

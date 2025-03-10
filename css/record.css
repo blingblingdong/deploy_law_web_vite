@@ -2038,11 +2038,7 @@ button[type="submit"] {
 
   
 #loading {
-  display: grid;
-  place-items: center; /* 簡單實現水平垂直居中 */
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
+} 
 #loading img {
   width: 300px  ;
   height: 300px;
