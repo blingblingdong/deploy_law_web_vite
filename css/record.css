@@ -2030,11 +2030,10 @@ button[type="submit"] {
 
 
   
-#loading {
-} 
 #loading img {
-  width: 300px  ;
+  width: 300px;
   height: 300px;
+  border-radius: 50%;
 }
 
 #chapter {
@@ -2146,10 +2145,6 @@ input:-webkit-autofill:active {
   border-radius: 50%;
  }
 
- img {
-  width: 60px;
-  border-radius: 50%;
- }
 
 .header {
   display: flex;
