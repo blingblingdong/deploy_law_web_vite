@@ -2161,3 +2161,8 @@ input:-webkit-autofill:active {
   align-content: left;
   padding-left: 0px !important;
 }
+
+.catpng {
+  width: 60px;
+  border-radius: 50%;
+}
