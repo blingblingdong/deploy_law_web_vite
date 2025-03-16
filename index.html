@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.1.1/ckeditor5.css">
-  <link rel="stylesheet" href="css/record.css">
+  <link rel="stylesheet" href="css/new-record.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -104,17 +104,19 @@
    <div id="public-folder">
       <div id="public-folder-find-page">
         <form id="public-folder-search">
-          <input id="public-folder-name">
-          <button type="submit">查詢</button>
+          <div id="folder-type" style='color:darkorange'>folder</div>
+          <label class="switch">
+            <input id="checkbox" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+          <div id="file-type">file</div>
+          <input id="public-folder-name" placeholder="查詢">
         </form>
         <div id="public-dir-display"></div>
+        <div id="AdisplayFile-area" style='display:none'></div>
       </div>
 
       <div id="in-public-folder" style='display:none'>
-        <div id="in-public-folder-header">
-          <h3 id="in-public-folder-name"></h3>
-          <div id="in-public-folder-writer"></div>
-        </div>
           <div id="public-folder-file">
           <nav id="public-file-nav" style='display:none'>
             <button id="public-folder-ham"></button>
@@ -122,20 +124,40 @@
             </ul>
           </nav>
           <div id="public-folder-file-word-area">
-            <div id='public-folder-title-bar'>
-             <h1 id="public-folder-file-title"></h1>
-             <div id='title-bar-button-area'>
-              <button id='public-search-file'>目錄</button>
-              <button id='share-file' class='share-file'>分享</button>
-              <button id='back_to_public_folder'>返回</button>
-             </div>
+            <div id="public-file-word-area-first">
+              <div id='public-file-first-header'>
+                <div id="in-public-folder-name"></div>
+               <div id='public-folder-first-header-second-bar'>
+                <div class='button-list'>
+                    <div class='back_to_public_folder'>離開</div>
+                    <div id='share-public-folder'>分享</div>
+                </div>
+               </div>
+              </div>
+              <div id="in-public-folder-writer"></div>
+              <div class="description">作品簡介</div>
+              <div id="public-file-word-area-first-description"></div>
+              <div class='catlog'>目錄</div>
+              <div id="public-file-word-area-first-file-list">
+                <ul id="public-file-list-ul"></ul>
+              </div>
             </div>
-            <div id="public-using-law"></div>
-            <div id=content-table-area>
+            <div id="public-file-word-area-second" style='display:none'>
+              <div id='public-folder-title-bar'>
+               <h1 id="public-folder-file-title"></h1>
+               <div id='title-bar-button-area'>
+                <button id='public-search-file'>目錄</button>
+                <button id='share-file' class='share-file'>分享</button>
+                <button class='back_to_public_folder'>返回</button>
+               </div>
+              </div>
+              <div id="public-using-law"></div>
+              <div id=content-table-area>
               <h3>content table</h3>
               <ul id="content-table"></ul>
+              </div>
+              <div id="public-folder-ck" class="ck-content ck-editor__editable ck"></div>
             </div>
-            <div id="public-folder-ck" class="ck-content ck-editor__editable ck"></div>
           </div>
         </div>
       </div>
@@ -152,10 +174,8 @@
         <h3><span id="folder-name"></span></h3>
         <ul class="record-nav">
           <li id="back_to_folder">返回</li>
-          <li id="record-editor-btn" class="record-li">文件</li>
           <li id="show-file-list" class="record-li">目錄</li>
-          <li id="record-card-btn" class="record-li active2">卡片</li>
-          <li id="about-dir" class="record-li">關於</li>
+          <li id="about-dir" class="record-li active2">關於</li>
         </ul>
       </div>
 
@@ -191,6 +211,14 @@
         </div>
       </div>
 
+
+
+      <div id="description-writer" style="display: none">
+        <div id="description-writer-area" style="display: flex">
+          <div id="description-markdown"></div>
+        </div>
+        <button id="description-confirm-edit">Save</button>
+      </div>
       <div id="record-writer" style="display: none">
         <div id="editor-area" style="display: flex">
           <div id="markdown"></div>
@@ -200,20 +228,15 @@
 
       <div id="folder-information" style='display: none'>
         <div id="folder-information-flex">
-          <dl class="information-flex">
-            <dt>資料夾名</dt>
-            <dt id = "folder-information-title"></dt>
-          </dl>
-          <dl>
-            <dt>簡介</dt>
-            <dt id = "folder-information-description"></dt>
-          </dl>
-          <dl>
-            <dt>公開</dt>
-            <dt id = "folder-information-public"></dt>
-          </dl>
-        </div>
-        <button id="edit-folder-information"></button>
+          <div id="folder-information-title"></div>
+          <div class="description">作品簡介
+            <button id="edit-folder-information">編輯簡介</button>
+          </div>
+          <div id="folder-information-description"></div>
+          <div class='catlog'>目錄</div>
+          <div id="private-file-word-area-first-file-list">
+            <ul id="private-file-list-ul"></ul>
+          </div>
       </div>
 
 
@@ -223,7 +246,7 @@
 
 
 
-
+</div>
   </div>
 
 
@@ -231,7 +254,7 @@
     <div id="law-search-area">
       <form id="law-search-area-form">
         <input list="law-name-data" id="search-chapter">
-        <button type="submit">查詢</button>
+        <button type="submit">查尋</button>
         <button type="reset" id="reset">清除</button>
       </form>
       <ul class="law-search-area-nav">

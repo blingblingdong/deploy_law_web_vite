@@ -1,6 +1,7 @@
 // otherFile.js
 const config = {
-    apiUrl: "https://deploylawweb-production.up.railway.app"
+    apiUrl: "http://127.0.0.1:8080"
+
 };
 // https://deploylawweb-production.up.railway.app
 // http://127.0.0.1:8080
@@ -241,19 +242,20 @@ $(document).ready(async function(){
     var chapter = $('#chapter').val().trim();
     var num = $('#num').val().trim();
     if(chapter !== "" && num !== "" && check_is_in_list(chapter)) {
-       let law = await load_law(chapter, num, config.apiUrl) as Law;
-       const tableHtml = law.one_show(enter_or_not);
-        let buffer = `<ul class="law-block-lines">`;
-        // 使用 for...of 來迭代 lines 向量，並將每一行包裝在 <li> 中
-        for (let line of law.lines) {
-            buffer += `<li class="law-block-line">${line}</li>`;
+       $.ajax({
+        url: `${config.apiUrl}/law_lines/${chapter}/${num}`,
+        method: 'GET',
+        success: function (response) {
+            // 將回應內容加入到 #all-lines
+            $("#result-area").html(response);
+        },
+        error: function (xhr, status, error) {
+            console.log("Error: " + error);
         }
+      });
 
-        buffer += `</ul>`;
-
-       $("#result-area").html(buffer);
-       law_vec.push(tableHtml);
-       counter += 1;
+       // law_vec.push(tableHtml);
+       // counter += 1;
 
     }
   })
@@ -593,13 +595,26 @@ $(document).on('click', '.the-dir', async function () {// 停止事件冒泡
     $(".record-footer").css("display", "flex");
     $("#folder-name").html($(this).text());
     $(".header-container").addClass("hideproperty");
-    // 讀取第一個文件
-    await get_file_list2(account.user_name, $(this).text());
-    
-        $("#loading").css("display", "flex");
-        await delay(2000);
-        $("#loading").css("display", "none");
-    await ggh();
+    var file_list = await get_file_list3(account.user_name, $(this).text());
+    $("#folder-information").show();
+    $("#file").hide();
+    const dir_name = $("#folder-name").text();
+    const id = account.user_name + "-" + dir_name;
+    try {
+      let dir_information = await get_folder(id);
+      $("#folder-information-title").html(dir_information.directory);
+      $("#folder-information-description").html(dir_information.description);
+    } catch (error) {
+      console.error("Failed to fetch folder information:", error);
+    // 可以在這裡添加用戶錯誤處理的邏輯，比如顯示錯誤信息
+    };
+    $("#private-file-list-ul").empty();
+    await delay(1000);
+     file_list.forEach(item => {
+      const item2 = `<li class='search-file-item'><a>${item}</a></li>`
+      $("#private-file-list-ul").append(item2);
+    });
+  
    });
 
 $(document).on('click', '#delete-dir', async function () {// 停止事件冒泡
@@ -941,7 +956,6 @@ try {
             },
             body: JSON.stringify(dir),
         });
-        alert("修改成功");
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
@@ -1081,10 +1095,6 @@ $(document).on('submit', '.card-add-form', async function (event) {
 
 
 
-$(document).ready(function() {
-    load_editor();
-})
-
 
 
 
@@ -1096,7 +1106,7 @@ $("#record-viewer-tools-edit").click(async function() {
 
     var file = await get_file(config.apiUrl, id);
     var content = file.content;
-    await updateEditorContent(content);
+    await updateEditorContent1(content);
     });
 
 
@@ -1105,7 +1115,7 @@ $("#confirm-edit").click(async function () {
     let text = $("#preview").html();
 
     let id = account.user_name + "-" + $("#folder-name").text() + "-" + $("#private-folder-title").text();
-    let content = editorInstance.getData();
+    let content = editorInstance1.getData();
 
     //更新筆記內容
     await update_content(config.apiUrl, id,content);
@@ -1122,6 +1132,21 @@ $("#confirm-edit").click(async function () {
     $("#file").css("display", "flex");
 });
 
+
+$("#description-confirm-edit").click(async function () {
+    let name = $("#folder-name").text();
+    let id = account.user_name + "-" + $("#folder-name").text();
+    let content = editorInstance.getData();
+    //更新筆記內容
+    await update_dir(name, true, content);
+    var folder = await get_folder(id);
+    if (folder) {
+      $("#folder-information-description").html(folder.description);
+    }
+
+    $("#description-writer").css("display", "none");
+    $("#folder-information").show();
+});
 
 async function delete_file(user_name: string, directory: string, file_name: string) {
     let id = user_name + "-" + directory + "-" + file_name;
@@ -1158,12 +1183,13 @@ import {ClassicEditor, EditorConfig, Clipboard} from 'ckeditor5';
 
 
 let editorInstance: ClassicEditor;
+let editorInstance1: ClassicEditor;
 
 function load_editor() {
     ClassicEditor
         .create((document.querySelector('#markdown') as HTMLElement), editorConfig as EditorConfig)
         .then(editor => {
-            editorInstance = editor;
+            editorInstance1 = editor;
             editor.editing.view.document.on('clipboardInput', (evt, data) => {
                 const plainText = data.dataTransfer.getData('text/plain');
                 editor.model.change(writer => {
@@ -1179,9 +1205,28 @@ function load_editor() {
 }
 
 
+function load_editor_description() {
+    ClassicEditor
+        .create((document.querySelector('#description-markdown') as HTMLElement), editorConfig as EditorConfig)
+        .then(editor => {
+            editorInstance = editor;
+            editor.editing.view.document.on('clipboardInput', (evt, data) => {
+                const plainText = data.dataTransfer.getData('text/plain');
+                editor.model.change(writer => {
+                    editor.model.insertContent(writer.createText(plainText));
+                });
+                evt.stop(); // 阻止事件繼續傳遞，避免重復處理
+            }, { priority: 'highest' });
+        })
+        .catch(error => {
+            console.error('There was a problem initializing the editor:', error);
+        });
+}
+
+
 $(document).on('click', '#ck-law-card', function () {
-    editorInstance.model.change(writer => {
-        editorInstance.model.insertContent(writer.createText( 'law-card-insertion-place'));
+    editorInstance1.model.change(writer => {
+        editorInstance1.model.insertContent(writer.createText( 'law-card-insertion-place'));
     });
     show_lawcard_Popup();
 });
@@ -1268,6 +1313,8 @@ $(document).on("click", ".search-file-item", async function(){
     $('.the-file a').removeClass('file-active');
     $(private_file_list[0]).addClass('file-active');
     $("#popup-search-file").remove();
+    $("#folder-information").hide();
+    $("#file").show();
 });
 
 
@@ -1330,7 +1377,7 @@ function show_lawcard_Popup() {
 
     $(document).on('click', '#confirm_card', async function () {
         const law_block = $("#view-bar").html();
-        let old_content = editorInstance.getData();
+        let old_content = editorInstance1.getData();
         const LawBlock = {old_content: old_content, new_content:law_block };
 
         try {
@@ -1342,7 +1389,7 @@ function show_lawcard_Popup() {
                 body: JSON.stringify(LawBlock),
             });
             let t= await res.text();
-            await updateEditorContent(t);
+            await updateEditorContent1(t);
             $("#popup-law-card").remove();
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -1368,6 +1415,15 @@ $(document).on('submit', '#insert-law-card', async function (event) {
     event.target.reset();
 });
 
+
+async function updateEditorContent1(newContent: string) {
+    if (editorInstance1) {
+        editorInstance1.setData(newContent);
+    } else {
+        console.error('Editor has not been initialized yet.');
+        setTimeout(() => updateEditorContent1(newContent), 1000);  // 延遲1秒後重試
+    }
+}
 
 async function updateEditorContent(newContent: string) {
     if (editorInstance) {
@@ -1419,6 +1475,8 @@ $(document).ready(function() {
     $('#dir').show();
 });
 
+
+let dir_list = [];
 $(document).ready(async function() {
     try {
         let res = await fetch(`${config.apiUrl}/pub_dir`, {
@@ -1426,6 +1484,7 @@ $(document).ready(async function() {
         });
         let t= await res.text();
         $("#public-dir-display").html(t);
+        dir_list = $(".public-dir").toArray();
     } catch (error: unknown) {
         if (error instanceof Error) {
             // 現在 TypeScript 知道這是一個 Error 對象，可以安全地訪問 .message 屬性
@@ -1442,35 +1501,30 @@ $(document).on('click', '.public-dir', async function() {
     const user = $(this).attr("id").split("-")[1];
     const dir_name = $(this).attr("id").split("-")[2];
     $("#in-public-folder").show();
-    let public_file_list: any;
 
-    //1.獲取file_list
-     $.ajax({
-        url: `${config.apiUrl}/file_list2/${user}/${dir_name}`,
-        method: 'GET',
-        success: function (response) {
-          public_file_list = response;
-        },
-        error: function (xhr, status, error) {
-                       console.log("Error: " + error);
-        }
-    });
-     await delay(2000);
-     const id = user + "-" + dir_name + "-" + public_file_list[0];       
-     const file = await get_file(config.apiUrl, id);
-       if (file) {
-         $("#public-folder-ck").html(file.content);
-         $("#content-table").html(file.css);
-         $("#public-folder-file-title").html(file.file_name);
-         $("#public-using-law").html(file.content_nav);
-    }
+    var buffer = [];
+    var file_list = await get_file_list3(user, dir_name);
+    file_list.forEach(file => {
+      var str =  `<li class='search-file-item-public'><a>${file}</a></li>`
+      buffer.push(str);
+    })
+
+    $('#public-file-list-ul').empty();
+    $('#public-file-list-ul').html(buffer);
+
+    var dir_information = await get_folder(`${user}-${dir_name}`)
+    $('#public-file-word-area-first-description').html(dir_information.description);
+    $("#public-file-word-area-first").show();
+    $("public-file-word-area-second").hide();
     $("#public-folder-find-page").hide();
-    $("in-public-folder").show();
-    $("#in-public-folder-name").html(dir_name);
+    $("#in-public-folder").show();
     $("#in-public-folder-writer").html(user);
+    $("#in-public-folder-name").html(dir_name);
+    $("#public-file-word-area-first-title").html(dir_name);
+    $("#public-file-word-area-first-writer").html(user);
    });
 
-$(document).on('click', '#back_to_public_folder', function() {
+$(document).on('click', '.back_to_public_folder', function() {
     $("#public-folder-find-page").show();
     $("#in-public-folder").hide();
 });
@@ -1494,31 +1548,43 @@ $(document).on('click', '#public-folder-ham', function() {
     $("#public-folder-file-nav").slideToggle(200);
 });
 
+async function get_file_list3(user_name: string, dir_name: string):Promise<string[]> {
+  const response = await fetch(`${config.apiUrl}/file_list2/${user_name}/${dir_name}`, {
+    method: 'GET'
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok: ' + response.statusText);
+  }
+  return response.json();
+} 
+
 $(document).ready( async function(){
   const urlParams = new URLSearchParams(window.location.search);
   const userid = urlParams.get('user');
   const directory = urlParams.get('dir');
   const file_name = urlParams.get('file_name');
 
-
   if(userid && directory) {
-   $.ajax({
-        url: `${config.apiUrl}/file_list/${userid}/${directory}`,
-        method: 'GET',
-        success: function (response) {
-            $("#public-folder-file-nav").html(response);
-        },
-        error: function (xhr, status, error) {
-                       console.log("Error: " + error);
-        }
-    });
     $("#gallery-area").show();
     $("#public-folder-find-page").hide();
     $("#in-public-folder").show();
     $("#in-public-folder-name").html(directory);
     $("#in-public-folder-writer").html(userid);
     $("#search-area").hide();
-   
+  
+    var buffer = [];
+    var file_list = await get_file_list3(userid, directory);
+    file_list.forEach(file => {
+      var str =  `<li class='search-file-item-public'><a>${file}</a></li>`
+      buffer.push(str);
+    })
+
+    $('#public-file-list-ul').empty();
+    $('#public-file-list-ul').html(buffer);
+    
+    var dir_information = await get_folder(`${userid}-${directory}`)
+    $('#public-file-word-area-first-description').html(dir_information.description);
+
     if(file_name) {
        const id = userid + "-" + directory + "-" + file_name;
        const file = await get_file(config.apiUrl, id);
@@ -1625,6 +1691,16 @@ $(document).on('click', '#hidePopup_change_file_name', function () {
     $("#popup_change_file_name").remove();
 });
 
+
+$(document).on('click', '.share-folder', function(){
+  const folder = $("#in-public-folder-name").text();
+  const writer = $("#in-public-folder-writer").text();
+  const url = `https://rustlawweb.netlify.app/?user=${writer}&dir=${folder}`
+  navigator.share({
+    url: url,
+  })
+})
+
 $(document).on('click', '.share-file', function(){
   const folder = $("#in-public-folder-name").text();
   const title = $("#public-folder-file-title").text();
@@ -1644,31 +1720,24 @@ $(document).on('click', '#private-share-file', function(){
   })
 })
 
-$(document).on("click", "#public-search-file" ,function(){
-  search_file_Popup_public();
+$(document).on("click", "#public-search-file" ,async function(){
+        // $("#public-file-word-area-second").hide();
+        // $("#public-file-word-area-first").show();
+    await search_file_Popup_public()
 })
 
 async function search_file_Popup_public() { 
     const writer = $("#in-public-folder-writer").text();
     const folder = $("#in-public-folder-name").text();
-    let public_file_list: any;
 
     //1.獲取file_list
-     $.ajax({
-        url: `${config.apiUrl}/file_list2/${writer}/${folder}`,
-        method: 'GET',
-        success: function (response) {
-          public_file_list = response;
-        },
-        error: function (xhr, status, error) {
-                       console.log("Error: " + error);
-        }
-    });
-
     
-        $("#loading").css("display", "flex");
-        await delay(2000);
-        $("#loading").css("display", "none");
+    var buffer = [];
+    var file_list = await get_file_list3(writer, folder);
+    file_list.forEach(file => {
+      var str =  `<li class='search-file-item-public'><a>${file}</a></li>`
+      buffer.push(str);
+    })
 
     // 建立彈出視窗的 HTML
     const popup_content = `
@@ -1702,17 +1771,17 @@ async function search_file_Popup_public() {
         $("#popup-search-file-public").remove();
     });
 
+    $('#search-file-ul-public').empty();
+    $('#search-file-ul-public').html(buffer);
 
-     public_file_list.forEach(item => {
-      const item2 = `<li class='search-file-item-public'><a>${item}</a></li>`
-      $("#search-file-ul-public").append(item2);
-    });
 }
 
 
 $(document).on("click", ".search-file-item-public", async function(){
    const id = $("#in-public-folder-writer").text() + "-" + $("#in-public-folder-name").text() + "-" + $(this).text();       const file = await get_file(config.apiUrl, id);
        if (file) {
+         $("#public-file-word-area-second").show();
+         $("#public-file-word-area-first").css("display", "none");
          $("#public-folder-ck").html(file.content);
          $("#content-table").html(file.css);
          $("#public-folder-file-title").html(file.file_name);
@@ -1725,7 +1794,7 @@ $(document).on("click", ".search-file-item-public", async function(){
 
 $(document).on("click", "#about-dir", async function(){
   $("#folder-information").show();
-
+  $("#file").hide();
   const dir_name = $("#folder-name").text();
   const id = account.user_name + "-" + dir_name;
   try {
@@ -1735,7 +1804,9 @@ $(document).on("click", "#about-dir", async function(){
   } catch (error) {
     console.error("Failed to fetch folder information:", error);
     // 可以在這裡添加用戶錯誤處理的邏輯，比如顯示錯誤信息
-  }
+  };
+  
+  
 });
 
 async function get_folder(id) {
@@ -1759,3 +1830,155 @@ $(document).ready(function() {
     });
 });
 
+
+
+
+
+
+
+$("#edit-folder-information").click(async function() {
+    $("#description-writer").css("display", "block");
+    $("#folder-information").css("display", "none");
+    $(".record-footer").css("display", "none");
+    var id = account.user_name + "-" + $("#folder-information-title").text();
+    var x = await get_folder(id);
+    await updateEditorContent(x.description);
+});
+
+$("#record-viewer-tools-edit").click(async function() {
+    $("#record-writer").css("display", "block");
+    $("#file").css("display", "none");
+    $(".record-footer").css("display", "none");
+    let id = account.user_name+ "-" + $("#folder-name").text() + "-" + $("#private-folder-title").text();
+
+    var file = await get_file(config.apiUrl, id);
+    var content = file.content;
+    await updateEditorContent1(content);
+    });
+
+$(document).ready(function() {
+    load_editor();
+    load_editor_description();
+})
+
+
+$("#public-folder-name").on('input', async function(event){
+  event.preventDefault();
+  var name = $('#public-folder-name').val() as string;
+  
+  if($('#checkbox').is(':checked')) {
+    // file模式
+    $('#AdisplayFile-area').empty();
+    every_file_list.forEach(item => {
+      if(item.includes(name)) {
+        $('#AdisplayFile-area').append(item);
+      }
+    })
+    return
+  }
+
+  $('#public-dir-display').empty();
+  dir_list.forEach(item => {
+   var s = item.innerHTML as string;
+   if(s.includes(name)) {
+    $('#public-dir-display').append(item);
+   }
+  });
+})
+
+
+let buffer = []; // 初始化 buffer 陣列
+
+async function display_every_files() {
+    return new Promise((resolve, reject) => { // 使用 Promise 來處理非同步操作
+        $.ajax({
+            url: `${config.apiUrl}/every_file`,
+            method: 'GET',
+            success: function (response) {
+                response.forEach(item => {
+                    var s = `
+                    <div class='AdisplayFile'>
+                        <div class='AdisplayFile-writer'>write by：<span>${item.user_name}</span></div>
+                        <h2 class='AdisplayFile-fileName'>${item.file_name}</h2>
+                        <div class='AdisplayFile-dirName'>From：<span>${item.directory}</span></div>
+                    </div>
+                    `;
+                    buffer.push(s);
+                });
+                resolve(buffer); // 將 buffer 作為成功解析的值
+            },
+            error: function (xhr, status, error) {
+                console.log("Error: " + error);
+                reject(error); // 拒絕 Promise，將錯誤作為理由
+            }
+        });
+    });
+}
+
+let every_file_list: any;
+$(document).ready(async function() {
+    every_file_list = await display_every_files();
+    $("#AdisplayFile-area").html(every_file_list);
+});
+$(document).on('click','.AdisplayFile', async function(){
+  var file_name = $(this).children(".AdisplayFile-fileName").text();
+  var dir_name = $(this).children(".AdisplayFile-dirName").children('span').text();
+  var writer = $(this).children(".AdisplayFile-writer").children('span').text();
+
+
+    var buffer = [];
+    var file_list = await get_file_list3(writer, dir_name);
+    file_list.forEach(file => {
+      var str =  `<li class='search-file-item-public'><a>${file}</a></li>`
+      buffer.push(str);
+    })
+
+    $('#public-file-list-ul').empty();
+    $('#public-file-list-ul').html(buffer);
+    $("#public-folder-find-page").hide();
+    $("#in-public-folder").show();
+    $("#in-public-folder-writer").html(writer);
+    $("#in-public-folder-name").html(dir_name);
+    $("#public-file-word-area-first-title").html(dir_name);
+    $("#public-file-word-area-first-writer").html(writer);
+    var dir_information = await get_folder(`${writer}-${dir_name}`)
+    $('#public-file-word-area-first-description').html(dir_information.description);
+
+     const id = writer + "-" + dir_name + "-" + file_name;
+     const file = await get_file(config.apiUrl, id);
+       if (file) {
+         $("#public-file-word-area-second").show();
+         $("#public-file-word-area-first").css("display", "none");
+         $("#public-folder-ck").html(file.content);
+         $("#content-table").html(file.css);
+         $("#public-folder-file-title").html(file.file_name);
+         $("#public-using-law").html(file.content_nav);
+       }
+
+})
+
+$('#checkbox').on('change', function() {
+  if(this.checked) {
+    $("#file-type").css("color", "darkorange");
+    $("#folder-type").css("color", "white");
+    $("#AdisplayFile-area").show();
+    $("#public-dir-display").hide();
+  }else {
+    $("#folder-type").css("color", "darkorange");
+    $("#file-type").css("color", "white");
+    $("#AdisplayFile-area").hide();
+    $("#public-dir-display").show();
+  }
+})
+
+$(document).on('click', '.law-block-chapter-num', function(){
+  if($(this).parent().children('.law-block-lines').hasClass("hide-law")){
+   $(this).parent().children('.law-block-lines').removeClass("hide-law");  
+   $(this).removeClass('law-block-down');
+   $(this).addClass('law-block-up');
+  }else {
+    $(this).parent().children('.law-block-lines').addClass("hide-law");
+    $(this).removeClass('law-block-up');
+    $(this).addClass('law-block-down');
+  }
+})

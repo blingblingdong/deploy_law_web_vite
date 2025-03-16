@@ -512,12 +512,12 @@
     border-radius: 5px;
 }
 
-#card-preview {
-    background-color: darkorange;
-    color: black;
-    padding: 20px;
-    border-radius: 10px;
-}
+  #card-preview {
+      background-color: darkorange;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+  }
 
 #view-bar {
     background-color: black;
@@ -539,17 +539,18 @@
     margin: 10px;
 }
 
-#small-header {
+.multiple-block {
+    color: white;
     border: 1px solid white;
     margin: 10px;
 }
 
 .law-block-content-multiple {
-    border-bottom: 1px solid white;
-    margin-top: 5px;
-    margin-left: 5px;
+    border-bottom: 0px solid white;
+    margin-top: 15px;
+    margin-left: 10px;
     margin-right: 5px;
-}
+  }
 
 .law-block-chapter {
     font-weight: bold;
@@ -561,7 +562,10 @@
 }
 
 
-
+#personal-png {
+  width: 100px;
+  border-radius: 50%;
+}
 
 #personal-data {
     margin-top: 100px;
@@ -579,14 +583,16 @@
 #personal-data button {
     background-color: darkorange;
     color: black;
-    width: 200px;
+    width: 100px;
     padding: 10px;
     border: 0px;
+    border-radius: 5px;
+    font-weight: bold;
     text-align: center !important;
 }
 
 .law-block-lines {
-    list-style-type: upper-roman;
+    list-style-type: upper-roman !important;
 }
 
 .normal-button {
@@ -610,8 +616,10 @@
 
 #result-area {
     height: 450px;
-    overflow: auto;
-    border: 1px solid #444;
+    overflow-y: auto;
+    border: 0px solid #444;
+    margin: 0px 30px;
+
 }
 
 .law-block-lines {
@@ -666,26 +674,18 @@
 }
 
 #search-law-form {
-    align-items: center;
-    text-align: center;
-}
+  margin-top: 50px;
+  margin-left: 10px;
+ }
 
-#search-law-form input,
-#search-law-form textarea,
-#search-law-form button {
-    width: 60%;
-    margin: 10px 0;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+#num-input-wrapper {
+  display: flex;
 }
 
 #search-law-form input,
 #search-law-form textarea {
-    background-color: #222;
+    background-color: black;
     color: #fff;
-    font-size: 20px;
-    text-align: center;
 }
 
 #top-search-law-h2 {
@@ -717,10 +717,6 @@
         display: none;
     }
 
-    #result-area {
-        width: 350px;
-        height: 350px;
-    }
 
     .law-block-lines {
         font-size: 14px;
@@ -760,7 +756,13 @@
 }
 
 
+#small-header {
+  display: none;
+}
 
+option {
+  font-size: 20px;
+}
 
 
 .header-title {
@@ -769,6 +771,21 @@
     text-align: center;
     font-family: "Playwrite DE Grund", cursive;
 }
+
+@media only screen and (max-width: 600px) {
+  .header-title {
+    font-size: 30px;
+  }
+
+  #big-header {
+    display: none;
+  }
+
+  #small-header {
+    display: flex;
+  }
+}
+
 
 .navbar {
     display: flex;
@@ -817,14 +834,14 @@
 
 .pre-but {
     position: absolute;
-    top:300px;
+    top:600px;
     left: 10px;
     font-size: 30px;
 }
 
 .next-but {
     position: absolute;
-    top:300px;
+    top:600px;
     right: 10px;
     font-size: 30px;
 }
@@ -874,13 +891,15 @@ dd {
     padding-right: 50px;
 }
 
-@media only screen and (max-width: 400px) {
-    #in_folder_title{
-        display: block;
-    }
+@media only screen and (max-width: 600px) { 
 
     .record-nav {
         gap: 20px;
+    }
+
+    
+    .record-nav li {
+     font-size: 12px;
     }
 }
 
@@ -1054,20 +1073,42 @@ dd {
     border-radius: 5px;
 }
 
+#editor-tool-bar-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 #editor-tool-bar {
     display: flex;
     gap: 20px;
     align-items: center;
     margin-bottom: 0px;
     justify-content: flex-start;
-    color: black;
-}
+ }
 
 #editor-tool-bar h1 {
   color: white;
 }
 
-#editor-tool-bar button {
+@media only screen and (max-width: 600px) {
+  #editor-tool-bar h1 {
+    font-size: 25px;
+  }
+
+  #editor-tool-bar {
+    display: block;
+  }
+
+  #editor-tool-bar-buttons button {
+    font-size: 12px !important;
+    border: none !important;
+
+  }
+}
+
+
+#editor-tool-bar-buttons button {
     padding: 10px 20px;
     border-radius: 5px;
     border: 1px solid white;
@@ -1077,11 +1118,27 @@ dd {
     color: white;
     background-color: black;
 }
+
+#record-viewer-tools-edit {
+
+}
+
+#record-viewer-tools-delete {
+}
+
 button {
     color: black;
 }
 
-:root {    /* Overrides the border radius setting in the theme. */
+:root {
+    /* Overrides the border radius setting in the theme. */
+    --ck-border-radius: 4px;
+    --ck-z-default: 100;
+
+    /* Overrides the default font size in the theme. */
+    --ck-font-size-base: 14px;
+
+    /* Helper variables to avoid duplication in the colors. */
     --ck-custom-background: black;
     --ck-custom-foreground: black;
     --ck-custom-border: black;
@@ -1255,8 +1312,10 @@ table {
 
 #public-folder-search {
     display: flex;
-    justify-content: center;
-    gap: 10px
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
 }
 
 #public-folder-search input {
@@ -1266,6 +1325,7 @@ table {
     color: white;
     font-size: 15px;
     width: 40%;
+    padding: 10px 20px;
 }
 
 #public-folder-search button {
@@ -1276,18 +1336,18 @@ table {
     font-weight: bold;
 }
 
-#public-dir-display h2 {
+#public-dir-display h2, .AdisplayFile h2 {
     margin: 10px 0;
     color: darkorange;
 }
 
-#public-dir-display {
+#public-dir-display, #AdisplayFile-area {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-.public-dir {
+.public-dir, .AdisplayFile {
     display: flex;
     margin: 10px;
     flex-direction: column;
@@ -1299,7 +1359,6 @@ table {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    border: 1px solid white;
     padding: 10px;
 }
 
@@ -1384,6 +1443,7 @@ table {
 #in-public-folder {
     display: flex;
     flex-direction: column;
+    margin-top: 10px;
 }
 
 #content-table li a {
@@ -1667,10 +1727,13 @@ body {
     flex: 0 0 55%;
 }
 
-#search-law-form button {
-    flex: 0 0 20%;
-}
 
+#search-area {
+  display: flex;
+  justify-content: flex-start; /* 水平居中 */
+  flex-direction: column;
+  gap: 20px;
+}
 
 #law-search-area-form button {
     background-color: darkorange;
@@ -1705,6 +1768,7 @@ button[type="submit"] {
 #dir {
     display: grid;
     gap: 20px;
+    padding: 0px;
     grid-template-columns: repeat(5, 1fr);
 }
 
@@ -1756,23 +1820,6 @@ button[type="submit"] {
 }
 
 
-
-#search-law-form button {
-    background-color: #444;
-    color: #fff;
-    cursor: pointer;
-    background-color: darkorange;
-    color: black;
-    border: 1px solid black;
-    font-size: 15px;
-    font-weight: 1000;
-}
-
-#search-law-form button:hover {
-    background-color: black;
-    color: darkorange;
-    border: 1px solid darkorange;
-}
 
 @media only screen and (max-width: 786px) {
 
@@ -1982,6 +2029,143 @@ button[type="submit"] {
     #public-folder-file-title {
       margin-bottom: 0px;
     }
+
+
+}
+
+
+
+  
+#loading img {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+}
+
+#chapter {
+   margin-right: 0px !important;
+   font-weight: bold;
+   box-sizing: border-box;
+   box-sizing: border-box;
+   font-size: 25px;
+   border: none;
+   z-index: 2;
+}
+
+#num {
+  text-align: left;
+  background-color: black;
+  font-size: 30px;
+  border: none;
+  outline: none;
+}
+
+@media only screen and (max-width: 500px) {
+  #chapter {
+    font-size: 20px;
+  } 
+
+  #num {
+    font-size: 20px;
+  }
+
+  #num-input-wrapper p{
+    font-size: 15px;
+  }
+
+}
+
+
+
+#num-input-wrapper p {
+  font-size: 20px;
+  margin-left: 50px;
+}
+
+#num-input-wrapper input {
+  background-color: black;
+}
+
+#search-law-form a {
+  text-align: left;
+  margin-left: 0px;
+
+}
+
+#num:after {
+  content: "§";
+  font-size: 200px;
+}
+
+#num:focus {
+  background-color: black; /* 焦點時保持背景為白色 */
+  /* 可以這裡設定其他焦點時的樣式，比如邊框顏色等 */
+}
+
+#chapter-input-wrapper a::before {
+  content: "";  
+  transform: rotate(45deg);
+  border-top:3px solid white;
+  margin-right: 10px;
+  height: 8px;
+  width: 8px;
+  border-right: 3px solid white;
+}
+
+
+/* 覆蓋 Chrome 自動填充的背景顏色 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: white !important;
+    background-color: black !important;
+    box-shadow: 0 0 0px 1000px black inset !important;
+}
+
+
+#chapter-input-wrapper a {
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding: 30px 0 30px 33px;
+ }
+
+
+#chapter-input-wrapper {
+  display: flex;
+  align-items: center;
+ }
+
+    
+#chapter-input-wrapper a::after {
+  content: ""; 
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 80px;
+  width: 80px;
+  border: 2px solid darkorange;
+  border-radius: 50%;
+ }
+
+
+.header {
+  display: flex;
+}
+
+.main-li a {
+  z-index: 9999 !important;
+  position: relativeri}
+
+
+#record-area {
+  margin-left: 0px !important;
+  align-items: left;
+  align-content: left;
+  padding-left: 0px !important;
 }
 
 .catpng {
@@ -1989,11 +2173,184 @@ button[type="submit"] {
   border-radius: 50%;
 }
 
-#public-folder-state::after {
-  content:"";
-  color: green;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #90be70;
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute; 
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+
+input:checked + .slider {
+  background-color: darkorange;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px darkorange;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px)   ;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
   border-radius: 50%;
+}
+
+
+.catlog:after, .description:after {
+    display: block;
+    content: "";
+    position: absolute;
+    right: 0;
+    margin-left: 60px;
+    width: 97%;
+    height: 0.5px;
+    background-color: white; /* 設置底線顏色 */
+}
+
+#word-area h2 {
+  font-weight: 500; /* 正確的 font-weight 應該是沒有單位的 */
+  line-height: 3rem;
+}
+
+
+#word-area h2:after {
+    display: block;
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 93%; /* 根據需要可調整寬度 */
+    height: 0.5px;
+    background-color: white; /* 設置底線顏色 */
+}
+
+.catlog, .description {
+  font-size: 1.2rem;
+  font-weight: 500; /* 正確的 font-weight 應該是沒有單位的 */
+  line-height: 3rem;
+  margin-left: 40px;
+}
+
+#public-file-list-ul, #private-file-list-ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+#folder-information-description {
+  margin-left: 5%;
+}
+
+#public-folder-file-word-area {
+  width: 100%;
+}
+
+#in-public-folder-name, #folder-information-title {
+  font-weight: 1000;
+  font-size: 2rem;
+  color: darkorange;
+}
+
+
+#in-public-folder-writer {
+  font-weight: 500;
+  font-size: 20px;
+}
+#public-file-word-area-first {
+ gap: 10px;
+ display: flex;
+ flex-direction: column;
+}
+
+#public-file-first-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.button-list {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+#folder-information-flex {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+#public-file-word-area-first-description {
+  margin-left: 5%;
+}
+
+.hide-law {
+  display: none;
+}
+
+.law-block-up::after {
+  content:"\f151" !important;
+  font-family: 'font awesome 5 free';
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.law-block-down::after {
+  content:"\f150" !important;
+  font-family: 'font awesome 5 free';
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.law-block-chapter-num::after {
+  content:"\f150";
+  font-family: 'font awesome 5 free';
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+
+.law-block-chapter-num {
+  display: flex;
+  align-items: center;
 }
