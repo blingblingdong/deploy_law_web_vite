@@ -1,6 +1,6 @@
 // otherFile.js
 const config = {
-    apiUrl: "http://127.0.0.1:8080"
+    apiUrl: "https://deploylawweb-production.up.railway.app"
 
 };
 // https://deploylawweb-production.up.railway.app
@@ -1246,11 +1246,11 @@ editorInstance.model.change(writer => {
   }
 });
 
-$(document).on("click", "#show-file-list" ,function(){
+$(document).on("click", "#show-file-list" ,async function(){
   search_file_Popup();
 })
 
-function search_file_Popup() {  
+async function search_file_Popup() {  
     // 建立彈出視窗的 HTML
     const popup_content = `
         <div class="popup-content" id="search-file-popup-content">
@@ -1262,10 +1262,7 @@ function search_file_Popup() {
             <div class="dropdown">
                 <ul id="search-file-ul" class="dropdown-menu"></ul>
             </div>
-                <div class="popup-footer">
-                   <button id="confirm_card">確定</button>
-                </div>
-            </div>
+                            </div>
         </div>`;
 
 
@@ -1286,7 +1283,9 @@ function search_file_Popup() {
         $("#popup-search-file").remove();
     });
 
-     private_file_list.forEach(item => {
+
+    var file_list = await get_file_list3(account.user_name,$('#folder-information-title').text())
+     file_list.forEach(item => {
       const item2 = `<li class='search-file-item'><a>${item}</a></li>`
       $("#search-file-ul").append(item2);
     });
@@ -1515,7 +1514,7 @@ $(document).on('click', '.public-dir', async function() {
     var dir_information = await get_folder(`${user}-${dir_name}`)
     $('#public-file-word-area-first-description').html(dir_information.description);
     $("#public-file-word-area-first").show();
-    $("public-file-word-area-second").hide();
+    $("#public-file-word-area-second").hide();
     $("#public-folder-find-page").hide();
     $("#in-public-folder").show();
     $("#in-public-folder-writer").html(user);
@@ -1866,7 +1865,7 @@ $("#public-folder-name").on('input', async function(event){
   event.preventDefault();
   var name = $('#public-folder-name').val() as string;
   
-  if($('#checkbox').is(':checked')) {
+  if($('.file-type').hasClass('show-type-active')) {
     // file模式
     $('#AdisplayFile-area').empty();
     every_file_list.forEach(item => {
@@ -1957,19 +1956,20 @@ $(document).on('click','.AdisplayFile', async function(){
 
 })
 
-$('#checkbox').on('change', function() {
-  if(this.checked) {
-    $("#file-type").css("color", "darkorange");
-    $("#folder-type").css("color", "white");
+$('#gallery-show-type > span > a').on('click', function() {
+  if($(this).hasClass('file-type')){
     $("#AdisplayFile-area").show();
     $("#public-dir-display").hide();
+    $(this).addClass('show-type-active');
+    $('.folder-type').removeClass('show-type-active');
   }else {
-    $("#folder-type").css("color", "darkorange");
-    $("#file-type").css("color", "white");
     $("#AdisplayFile-area").hide();
     $("#public-dir-display").show();
+    $(this).addClass('show-type-active');
+    $(".file-type").removeClass('show-type-active');
   }
 })
+
 
 $(document).on('click', '.law-block-chapter-num', function(){
   if($(this).parent().children('.law-block-lines').hasClass("hide-law")){
@@ -1981,4 +1981,9 @@ $(document).on('click', '.law-block-chapter-num', function(){
     $(this).removeClass('law-block-up');
     $(this).addClass('law-block-down');
   }
+})
+
+$('#public-first-page').on('click', function(){
+  $('#public-file-word-area-first').show();
+  $('#public-file-word-area-second').hide();
 })

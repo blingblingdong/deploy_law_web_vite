@@ -727,6 +727,15 @@
         margin: 5px;
     }
 
+    #folder-type {
+      top: 83px;
+    }
+
+    #file-type{
+      top: 83px !important;
+    }
+
+
 }
 
 @media only screen and (min-width: 401px) and (max-width: 700px){
@@ -1324,17 +1333,10 @@ table {
     border: none;
     color: white;
     font-size: 15px;
-    width: 40%;
+    width: 70%;
     padding: 10px 20px;
 }
 
-#public-folder-search button {
-    border: none;
-    border-radius: 5px;
-    background-color: darkorange;
-    font-size: 14px;
-    font-weight: bold;
-}
 
 #public-dir-display h2, .AdisplayFile h2 {
     margin: 10px 0;
@@ -2246,13 +2248,13 @@ input:checked + .slider:before {
     background-color: white; /* 設置底線顏色 */
 }
 
-#word-area h2 {
+#word-area h2, #public-folder-ck h2 {
   font-weight: 500; /* 正確的 font-weight 應該是沒有單位的 */
   line-height: 3rem;
 }
 
 
-#word-area h2:after {
+#word-area h2:after, #public-folder-ck h2:after {
     display: block;
     content: "";
     position: absolute;
@@ -2329,21 +2331,21 @@ input:checked + .slider:before {
 }
 
 .law-block-up::after {
-  content:"\f151" !important;
+  content:"\f0d8" !important;
   font-family: 'font awesome 5 free';
   font-size: 20px;
   margin-left: 10px;
 }
 
 .law-block-down::after {
-  content:"\f150" !important;
+  content:"\f0d7" !important;
   font-family: 'font awesome 5 free';
   font-size: 20px;
   margin-left: 10px;
 }
 
 .law-block-chapter-num::after {
-  content:"\f150";
+  content:"\f0d8";
   font-family: 'font awesome 5 free';
   font-size: 20px;
   margin-left: 10px;
@@ -2353,4 +2355,75 @@ input:checked + .slider:before {
 .law-block-chapter-num {
   display: flex;
   align-items: center;
+}
+
+input[type=checkbox]{
+	height: 0;
+	width: 0 !important;
+	visibility: hidden;
+  margin-left: 0px;
+}
+
+label {
+	cursor: pointer;
+	width: 70px;
+	height: 30px;
+	background: grey;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+
+label:after {
+	content: '';
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 20px;
+	height: 20px;
+	background: #fff;
+	border-radius: 90px;
+  transition: 0.7s;
+}
+
+
+
+input:checked + label {
+	background: #6f42c1;;
+}
+
+label:active:after {
+	width: 130px;
+}
+
+input:checked + label:after {
+	left: calc(100% - 5px);
+	transform: translateX(-100%);
+}
+
+#file-type {
+  position: absolute;
+  top: 87px;
+  font-size: 15px;
+  z-index: 1;
+  left: 30px;
+  display: none;
+}
+
+
+#folder-type {
+  position: absolute;
+  top: 87px;
+  font-size: 15px;
+  z-index: 1;
+  left: 50px;
+}
+
+.show-type-active {
+  color: darkorange;
+  font-weight: 500;
+}
+
+#public-folder-ck h2 {
+
 }
